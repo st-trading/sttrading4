@@ -149,101 +149,9 @@ export default function Navbar({
             )}
           </nav>
 
-          {/* Actions & Profile (Desktop) */}
-          <div className="hidden md:flex items-center space-x-4">
-            {/* Demo admin toggle */}
-            <div className="flex items-center bg-slate-800/80 rounded-full px-3 py-1 border border-slate-700">
-              <span className="text-[10px] text-slate-400 font-medium mr-2">ADMIN DEMO</span>
-              <button
-                onClick={() => setIsAdminDemo(!isAdminDemo)}
-                className={`w-8 h-4 rounded-full p-0.5 transition-colors duration-200 focus:outline-none cursor-pointer ${
-                  isAdminDemo ? "bg-amber-500" : "bg-slate-600"
-                }`}
-              >
-                <div
-                  className={`w-3 h-3 bg-white rounded-full shadow-md transform duration-200 ${
-                    isAdminDemo ? "translate-x-4" : "translate-x-0"
-                  }`}
-                />
-              </button>
-            </div>
-
-            {user ? (
-              <div className="relative">
-                <button
-                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-full border border-slate-700 transition-colors cursor-pointer"
-                >
-                  {user.photoURL ? (
-                    <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-full referrerPolicy" referrerPolicy="no-referrer" />
-                  ) : (
-                    <User className="w-4 h-4 text-slate-300" />
-                  )}
-                  <span className="text-xs font-semibold text-slate-200 max-w-[100px] truncate">
-                    {user.displayName || user.email}
-                  </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                </button>
-
-                <AnimatePresence>
-                  {profileDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 mt-2 w-56 rounded-xl bg-slate-800 border border-slate-700 shadow-xl overflow-hidden z-50"
-                    >
-                      <div className="px-4 py-3 border-b border-slate-700 bg-slate-800/50">
-                        <p className="text-xs text-slate-400">Signed in as</p>
-                        <p className="text-sm font-semibold text-slate-200 truncate">{user.email}</p>
-                        {isActualAdmin && (
-                          <span className="inline-block mt-1 px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded text-[9px] font-bold uppercase tracking-wider">
-                            Administrator
-                          </span>
-                        )}
-                      </div>
-                      <div className="py-1">
-                        <button
-                          onClick={() => {
-                            setProfileDropdownOpen(false);
-                            handleNavClick("inquiry");
-                          }}
-                          className="w-full text-left px-4 py-2 text-xs text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors cursor-pointer"
-                        >
-                          My Inquiries
-                        </button>
-                        {isActualAdmin && (
-                          <button
-                            onClick={() => {
-                              setProfileDropdownOpen(false);
-                              handleNavClick("admin");
-                            }}
-                            className="w-full text-left px-4 py-2 text-xs text-amber-300 hover:bg-slate-700/50 hover:text-amber-200 transition-colors font-medium cursor-pointer"
-                          >
-                            Admin Dashboard
-                          </button>
-                        )}
-                        <button
-                          onClick={handleLogout}
-                          className="w-full text-left px-4 py-2.5 text-xs text-rose-400 hover:bg-slate-700/50 hover:text-rose-300 transition-colors flex items-center space-x-2 cursor-pointer"
-                        >
-                          <LogOut className="w-3.5 h-3.5" />
-                          <span>로그아웃 (Sign Out)</span>
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <button
-                onClick={handleLogin}
-                className="flex items-center space-x-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-all duration-200 shadow-md shadow-indigo-600/15 cursor-pointer"
-              >
-                <LogIn className="w-3.5 h-3.5" />
-                <span>Google 로그인</span>
-              </button>
-            )}
+          {/* Actions & Profile (Desktop) - Removed as requested */}
+          <div className="hidden md:flex items-center">
+            {/* Kept empty to maintain structural alignment or removed */}
           </div>
 
           {/* Mobile Menu Button */}
@@ -311,53 +219,7 @@ export default function Navbar({
               )}
             </div>
 
-            <div className="pt-4 border-t border-slate-800 flex flex-col space-y-3">
-              <div className="flex items-center justify-between bg-slate-800/80 rounded-xl px-4 py-2.5 border border-slate-700">
-                <span className="text-xs text-slate-400 font-medium">ADMIN DEMO (관리자 체험)</span>
-                <button
-                  onClick={() => setIsAdminDemo(!isAdminDemo)}
-                  className={`w-8 h-4 rounded-full p-0.5 transition-colors duration-200 focus:outline-none cursor-pointer ${
-                    isAdminDemo ? "bg-amber-500" : "bg-slate-600"
-                  }`}
-                >
-                  <div
-                    className={`w-3 h-3 bg-white rounded-full shadow-md transform duration-200 ${
-                      isAdminDemo ? "translate-x-4" : "translate-x-0"
-                    }`}
-                  />
-                </button>
-              </div>
-
-              {user ? (
-                <div className="bg-slate-800/50 rounded-xl p-3 border border-slate-800/80 flex flex-col space-y-2">
-                  <div className="flex items-center space-x-3">
-                    {user.photoURL ? (
-                      <img src={user.photoURL} alt="Profile" className="w-8 h-8 rounded-full referrerPolicy" referrerPolicy="no-referrer" />
-                    ) : (
-                      <User className="w-8 h-8 text-slate-300 bg-slate-700 p-1.5 rounded-full" />
-                    )}
-                    <div className="flex flex-col min-w-0">
-                      <p className="text-xs font-semibold text-slate-200 truncate">{user.displayName || "Client"}</p>
-                      <p className="text-[10px] text-slate-500 truncate">{user.email}</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-center py-2 text-xs text-rose-400 hover:text-rose-300 bg-rose-500/10 rounded-lg font-medium transition-colors border border-rose-500/20 cursor-pointer"
-                  >
-                    로그아웃 (Sign Out)
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={handleLogin}
-                  className="w-full flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-3 rounded-xl transition-colors shadow-md cursor-pointer"
-                >
-                  <LogIn className="w-4 h-4" />
-                  <span>Google 계정으로 로그인</span>
-                </button>
-              )}
-            </div>
+            {/* Removed mobile actions per request */}
           </motion.div>
         )}
       </AnimatePresence>
