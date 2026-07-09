@@ -1,0 +1,73 @@
+{
+  "entities": {
+    "inquiry": {
+      "title": "Inquiry",
+      "description": "A customer request for quote or information.",
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "description": "Name of the customer company."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the contact person."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email address of the contact person."
+        },
+        "productName": {
+          "type": "string",
+          "description": "Name of the product in inquiry."
+        },
+        "message": {
+          "type": "string",
+          "description": "Inquiry details and requirements."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "reviewing", "completed"],
+          "description": "Status of the inquiry."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of creation."
+        },
+        "userId": {
+          "type": "string",
+          "description": "UID of the logged-in user who created this inquiry (optional)."
+        },
+        "adminResponse": {
+          "type": "string",
+          "description": "Admin response or internal notes (optional)."
+        }
+      },
+      "required": ["companyName", "name", "email", "productName", "message", "status", "createdAt"]
+    },
+    "admin": {
+      "title": "Admin",
+      "description": "Registered administrator user.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Administrator email address."
+        }
+      },
+      "required": ["email"]
+    }
+  },
+  "firestore": {
+    "/inquiries/{inquiryId}": {
+      "schema": "inquiry",
+      "description": "Collection of inquiries submitted by visitors or users."
+    },
+    "/admins/{adminId}": {
+      "schema": "admin",
+      "description": "Collection of administrators."
+    }
+  }
+}
