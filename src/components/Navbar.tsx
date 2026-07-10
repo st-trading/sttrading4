@@ -80,19 +80,19 @@ export default function Navbar({
   };
 
   return (
-    <header id="navbar-header" className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white shadow-lg transition-all duration-300">
+    <header id="navbar-header" className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 text-slate-800 shadow-sm transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
           {/* Logo Section */}
           <div className="flex items-center cursor-pointer" onClick={() => handleNavClick("home")}>
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-sky-400 flex items-center justify-center shadow-md shadow-indigo-500/20">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-sky-400 flex items-center justify-center shadow-md shadow-indigo-500/10">
                 <span className="font-extrabold text-xl tracking-wider text-white">ST</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-lg tracking-tight leading-none text-white">에스티트레이딩</span>
-                <span className="text-[10px] tracking-widest text-slate-400 uppercase font-medium mt-1">ST TRADING CO.</span>
+                <span className="font-bold text-lg tracking-tight leading-none text-slate-800">에스티트레이딩</span>
+                <span className="text-[10px] tracking-widest text-slate-500 uppercase font-medium mt-1">ST TRADING CO.</span>
               </div>
             </div>
           </div>
@@ -104,27 +104,27 @@ export default function Navbar({
                 <button
                   onClick={() => handleNavClick(item.id)}
                   className={`flex items-center space-x-1 py-2 text-sm font-semibold tracking-wide transition-colors duration-200 cursor-pointer ${
-                    activeView === item.id ? "text-sky-400 font-bold" : "text-slate-300 hover:text-white"
+                    activeView === item.id ? "text-indigo-600 font-bold" : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
                   <span>{item.label}</span>
                   {item.subItems && (
-                    <ChevronDown className="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition-colors" />
+                    <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-slate-600 transition-colors" />
                   )}
                 </button>
                 
                 {/* Dropdown menu if sub-items exist */}
                 {item.subItems && (
                   <div className="absolute left-1/2 -translate-x-1/2 pt-2 w-48 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-50">
-                    <div className="py-2 px-1 rounded-xl bg-slate-800 border border-slate-700 shadow-xl">
+                    <div className="py-2 px-1 rounded-xl bg-white border border-slate-200/80 shadow-lg">
                       {item.subItems.map((sub, idx) => (
                         <button
                           key={idx}
                           onClick={() => handleNavClick(item.id, sub.subId)}
                           className={`w-full text-left px-4 py-2.5 text-xs rounded-lg transition-colors cursor-pointer ${
                             activeView === item.id && activeSubView === sub.subId
-                              ? "bg-slate-700 text-sky-400 font-bold"
-                              : "text-slate-300 hover:text-white hover:bg-slate-700/50"
+                              ? "bg-slate-50 text-indigo-600 font-bold"
+                              : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                           }`}
                         >
                           {sub.label}
@@ -140,10 +140,10 @@ export default function Navbar({
               <button
                 onClick={() => handleNavClick("admin")}
                 className={`py-2 text-sm font-semibold tracking-wide transition-colors duration-200 flex items-center space-x-1.5 cursor-pointer ${
-                  activeView === "admin" ? "text-amber-400" : "text-slate-300 hover:text-amber-300"
+                  activeView === "admin" ? "text-amber-600 font-bold" : "text-slate-600 hover:text-amber-600"
                 }`}
               >
-                <Shield className="w-4 h-4 text-amber-400" />
+                <Shield className="w-4 h-4 text-amber-500" />
                 <span>ADMIN PORTAL</span>
               </button>
             )}
@@ -158,7 +158,7 @@ export default function Navbar({
           <div className="md:hidden flex items-center space-x-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-400 hover:text-white focus:outline-none"
+              className="p-2 text-slate-500 hover:text-slate-900 focus:outline-none"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -173,15 +173,15 @@ export default function Navbar({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-slate-800 bg-slate-900/98 px-4 py-4 space-y-3 shadow-inner"
+            className="md:hidden border-t border-slate-100 bg-white px-4 py-4 space-y-3 shadow-md"
           >
             <div className="space-y-1">
               {navItems.map((item) => (
                 <div key={item.id} className="py-1">
                   <button
                     onClick={() => handleNavClick(item.id)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-sm font-semibold tracking-wide transition-colors cursor-pointer ${
-                      activeView === item.id ? "bg-slate-800 text-sky-400 font-bold" : "text-slate-300 hover:bg-slate-800/50 hover:text-white"
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm font-bold tracking-wide transition-colors cursor-pointer ${
+                      activeView === item.id ? "bg-slate-100 text-indigo-600 font-bold" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
                     {item.label}
@@ -194,8 +194,8 @@ export default function Navbar({
                           onClick={() => handleNavClick(item.id, sub.subId)}
                           className={`w-full text-left py-1.5 text-xs rounded-md px-2.5 transition-colors cursor-pointer ${
                             activeView === item.id && activeSubView === sub.subId
-                              ? "text-sky-400 font-bold bg-slate-800/40"
-                              : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/20"
+                              ? "text-indigo-600 font-bold bg-indigo-50/75"
+                              : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
                           }`}
                         >
                           • {sub.label}
@@ -209,11 +209,11 @@ export default function Navbar({
               {isActualAdmin && (
                 <button
                   onClick={() => handleNavClick("admin")}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-semibold tracking-wide flex items-center space-x-2 mt-2 cursor-pointer ${
-                    activeView === "admin" ? "bg-amber-500/10 text-amber-400" : "text-amber-300 hover:bg-slate-800/50"
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-bold tracking-wide flex items-center space-x-2 mt-2 cursor-pointer ${
+                    activeView === "admin" ? "bg-amber-500/10 text-amber-600" : "text-amber-600 hover:bg-slate-50"
                   }`}
                 >
-                  <Shield className="w-4 h-4 text-amber-400" />
+                  <Shield className="w-4 h-4 text-amber-500" />
                   <span>ADMIN PORTAL</span>
                 </button>
               )}

@@ -104,6 +104,11 @@ export default function InquiryForm({ selectedProduct, setSelectedProduct }: Inq
 
     setIsSubmitting(true);
     
+    const createdAt = new Date().toISOString();
+    let firestoreSucceeded = false;
+    let formspreeSucceeded = false;
+
+    // 1. Try to save to Firestore database (wrapped in a safe try-catch)
     try {
       const newInquiry: Omit<Inquiry, "id"> = {
         companyName: companyName.trim(),
@@ -112,36 +117,46 @@ export default function InquiryForm({ selectedProduct, setSelectedProduct }: Inq
         productName: productName.trim(),
         message: message.trim(),
         status: "pending",
-        createdAt: new Date().toISOString(),
+        createdAt: createdAt,
         ...(user ? { userId: user.uid } : {})
       };
-
-      // Add to Firestore database
       await addDoc(collection(db, "inquiries"), newInquiry);
-      
-      // Submit to Formspree for central data collection
-      try {
-        await fetch("https://formspree.io/f/xaqgrnvr", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify({
-            companyName: companyName.trim(),
-            name: name.trim(),
-            email: email.trim(),
-            productName: productName.trim(),
-            message: message.trim(),
-            status: "pending",
-            createdAt: newInquiry.createdAt,
-            userId: user ? user.uid : "anonymous"
-          })
-        });
-      } catch (formspreeErr) {
-        console.error("Formspree submission failed, but Firestore succeeded:", formspreeErr);
+      firestoreSucceeded = true;
+    } catch (firestoreErr) {
+      console.warn("Firestore submission failed (this is expected if Firebase is not configured on your host):", firestoreErr);
+    }
+    
+    // 2. Try to submit to Formspree for email notification (always runs)
+    try {
+      const formspreeResponse = await fetch("https://formspree.io/f/xaqgrnvr", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          "회사명 (Company)": companyName.trim(),
+          "담당자명 (Name)": name.trim(),
+          "이메일 (Email)": email.trim(),
+          "문의제품 (Product)": productName.trim(),
+          "문의내용 (Message)": message.trim(),
+          "상태 (Status)": "대기중 (pending)",
+          "제출일시 (Date)": createdAt,
+          "회원ID (User ID)": user ? user.uid : "비회원 (anonymous)"
+        })
+      });
+
+      if (formspreeResponse.ok) {
+        formspreeSucceeded = true;
+      } else {
+        console.error("Formspree response error:", formspreeResponse.statusText);
       }
-      
+    } catch (formspreeErr) {
+      console.error("Formspree submission failed:", formspreeErr);
+    }
+    
+    // 3. Handle result feedback
+    if (firestoreSucceeded || formspreeSucceeded) {
       setSubmitSuccess(true);
       
       // Clear inputs (except email & name if logged in)
@@ -157,13 +172,11 @@ export default function InquiryForm({ selectedProduct, setSelectedProduct }: Inq
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
-
-    } catch (err) {
-      console.error("Inquiry submission failed:", err);
+    } else {
       setErrorMessage("문의 제출 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
-    } finally {
-      setIsSubmitting(false);
     }
+    
+    setIsSubmitting(false);
   };
 
   return (
