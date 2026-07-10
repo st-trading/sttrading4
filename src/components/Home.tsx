@@ -51,7 +51,7 @@ export default function Home({ onViewChange }: HomeProps) {
               <div className="flex items-center space-x-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse" />
                 <span className="text-xs font-bold text-indigo-600 tracking-wider uppercase">
-                  {t("최상위 활성원료 유통 유니온", "ACTIVE INGREDIENT TOTAL DISTRIBUTION")}
+                  ACTIVE INGREDIENT TOTAL DISTRIBUTION
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mt-3 text-slate-900 leading-tight animate-fade-in">
