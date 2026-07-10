@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LogIn, LogOut, Shield, User, ChevronDown } from "lucide-react";
 import { auth, googleProvider } from "../lib/firebase";
 import { signInWithPopup, signOut, onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
