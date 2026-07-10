@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { Search, Filter, MessageSquare, Compass, Info, Check, Sparkles } from "lucide-react";
 import { PRODUCTS } from "../data/products";
 import { Product, ProductCategory } from "../types";
