@@ -1,8 +1,9 @@
 import React from "react";
 import { motion } from "motion/react";
 import { Award, FileText, Compass } from "lucide-react";
-import bannerImg from "../assets/images/cosmetics_raw_materials_banner_1783564904793.jpg";
-import bgImg from "../assets/images/aesthetic_white_flower_bg_1783650042758.jpg";
+
+const bannerImg = "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200&auto=format&fit=crop";
+const bgImg = "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1600&auto=format&fit=crop";
 
 interface HomeProps {
   onViewChange: (view: string, subView?: string) => void;
