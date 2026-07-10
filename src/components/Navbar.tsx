@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, LogIn, LogOut, Shield, User, ChevronDown } from "lucide-react";
+import { Menu, X, LogIn, LogOut, Shield, User, ChevronDown, Globe } from "lucide-react";
 import { auth, googleProvider } from "../lib/firebase";
 import { signInWithPopup, signOut, onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface NavbarProps {
   activeView: string;
@@ -22,6 +23,7 @@ export default function Navbar({
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -50,28 +52,28 @@ export default function Navbar({
   const isActualAdmin = user?.email === "ehlolhan@gmail.com" || isAdminDemo;
 
   const navItems = [
-    { id: "home", label: "HOME" },
+    { id: "home", label: t("홈", "HOME") },
     {
       id: "company",
-      label: "COMPANY",
+      label: t("회사소개", "COMPANY"),
       subItems: [
-        { label: "인사말", subId: "greeting" },
-        { label: "회사연혁", subId: "history" },
-        { label: "오시는길", subId: "location" }
+        { label: t("인사말", "Greeting"), subId: "greeting" },
+        { label: t("회사연혁", "History"), subId: "history" },
+        { label: t("오시는길", "Location"), subId: "location" }
       ]
     },
     {
       id: "product",
-      label: "PRODUCT",
+      label: t("취급원료", "PRODUCTS"),
       subItems: [
-        { label: "전체보기", subId: "all" },
-        { label: "염료 / DYE", subId: "dye" },
-        { label: "색소 / COLOR", subId: "color" },
-        { label: "보습제 / HUMECTANT", subId: "humectant" },
-        { label: "ACTIVE (기능성)", subId: "active" }
+        { label: t("전체보기", "All Raw Materials"), subId: "all" },
+        { label: t("염료 / DYE", "Dyes (DYE)"), subId: "dye" },
+        { label: t("색소 / COLOR", "Colorants (COLOR)"), subId: "color" },
+        { label: t("보습제 / HUMECTANT", "Humectants (HUMECTANT)"), subId: "humectant" },
+        { label: t("ACTIVE (기능성)", "Active Ingredients"), subId: "active" }
       ]
     },
-    { id: "inquiry", label: "C/S (견적문의)", subItems: [{ label: "견적문의", subId: "all" }] }
+    { id: "inquiry", label: t("견적문의", "INQUIRY"), subItems: [{ label: t("견적문의", "Get Quote"), subId: "all" }] }
   ];
 
   const handleNavClick = (viewId: string, subId?: string) => {
@@ -91,14 +93,16 @@ export default function Navbar({
                 <span className="font-extrabold text-xl tracking-wider text-white">ST</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-lg tracking-tight leading-none text-slate-800">에스티트레이딩</span>
+                <span className="font-bold text-lg tracking-tight leading-none text-slate-800">
+                  {t("에스티트레이딩", "ST Trading")}
+                </span>
                 <span className="text-[10px] tracking-widest text-slate-500 uppercase font-medium mt-1">ST TRADING CO.</span>
               </div>
             </div>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex space-x-8 items-center">
             {navItems.map((item) => (
               <div key={item.id} className="relative group">
                 <button
@@ -149,13 +153,50 @@ export default function Navbar({
             )}
           </nav>
 
-          {/* Actions & Profile (Desktop) - Removed as requested */}
-          <div className="hidden md:flex items-center">
-            {/* Kept empty to maintain structural alignment or removed */}
+          {/* Desktop Language Switcher */}
+          <div className="hidden md:flex items-center space-x-1.5 bg-slate-100 p-1 rounded-lg border border-slate-200/50">
+            <button
+              onClick={() => setLanguage("ko")}
+              className={`px-3 py-1 text-[11px] font-bold rounded-md transition-all cursor-pointer ${
+                language === "ko"
+                  ? "bg-white text-indigo-600 shadow-sm"
+                  : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              KR
+            </button>
+            <button
+              onClick={() => setLanguage("en")}
+              className={`px-3 py-1 text-[11px] font-bold rounded-md transition-all cursor-pointer ${
+                language === "en"
+                  ? "bg-white text-indigo-600 shadow-sm"
+                  : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              EN
+            </button>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button & Language toggle */}
           <div className="md:hidden flex items-center space-x-2">
+            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200/50 text-[10px] font-bold">
+              <button
+                onClick={() => setLanguage("ko")}
+                className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                  language === "ko" ? "bg-white text-indigo-600 shadow-xs" : "text-slate-500"
+                }`}
+              >
+                KR
+              </button>
+              <button
+                onClick={() => setLanguage("en")}
+                className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                  language === "en" ? "bg-white text-indigo-600 shadow-xs" : "text-slate-500"
+                }`}
+              >
+                EN
+              </button>
+            </div>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-slate-500 hover:text-slate-900 focus:outline-none"
@@ -173,7 +214,7 @@ export default function Navbar({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-slate-100 bg-white px-4 py-4 space-y-3 shadow-md"
+            className="md:hidden border-t border-slate-100 bg-white px-4 py-4 space-y-4 shadow-md"
           >
             <div className="space-y-1">
               {navItems.map((item) => (
@@ -219,7 +260,37 @@ export default function Navbar({
               )}
             </div>
 
-            {/* Removed mobile actions per request */}
+            {/* Mobile Language Switcher (additional indicator) */}
+            <div className="flex items-center justify-between border-t border-slate-100 pt-4 px-2">
+              <span className="text-xs font-semibold text-slate-500 flex items-center space-x-1">
+                <Globe className="w-3.5 h-3.5 text-slate-400" />
+                <span>Language / 언어</span>
+              </span>
+              <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200/50 text-[11px] font-bold">
+                <button
+                  onClick={() => {
+                    setLanguage("ko");
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                    language === "ko" ? "bg-white text-indigo-600 shadow-xs" : "text-slate-500"
+                  }`}
+                >
+                  한국어
+                </button>
+                <button
+                  onClick={() => {
+                    setLanguage("en");
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                    language === "en" ? "bg-white text-indigo-600 shadow-xs" : "text-slate-500"
+                  }`}
+                >
+                  English
+                </button>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Award, FileText, Compass } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const bannerImg = "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200&auto=format&fit=crop";
 const bgImg = "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1600&auto=format&fit=crop";
@@ -10,6 +11,8 @@ interface HomeProps {
 }
 
 export default function Home({ onViewChange }: HomeProps) {
+  const { t } = useLanguage();
+
   return (
     <div 
       className="py-16 min-h-[80vh] flex flex-col justify-center relative bg-cover bg-center"
@@ -48,17 +51,20 @@ export default function Home({ onViewChange }: HomeProps) {
               <div className="flex items-center space-x-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse" />
                 <span className="text-xs font-bold text-indigo-600 tracking-wider uppercase">
-                  ACTIVE INGREDIENT TOTAL DISTRIBUTION
+                  {t("최상위 활성원료 유통 유니온", "ACTIVE INGREDIENT TOTAL DISTRIBUTION")}
                 </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mt-3 text-slate-900 leading-tight">
-                최상위 화장품 원료 파트너, <br />
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mt-3 text-slate-900 leading-tight animate-fade-in">
+                {t("최상위 화장품 원료 파트너,", "Premier Cosmetic Ingredients Partner,")}<br />
                 <span className="bg-gradient-to-r from-indigo-600 to-sky-600 bg-clip-text text-transparent">
-                  에스티트레이딩
+                  {t("에스티트레이딩", "ST Trading")}
                 </span>
               </h1>
               <p className="text-xs sm:text-sm text-slate-600 mt-4 max-w-2xl leading-relaxed font-medium">
-                글로벌 총판 네트워크와 철저한 ISO 검증 시스템을 바탕으로 고순도 색소, 염료, 유효 진정 활성 성분을 유통합니다.
+                {t(
+                  "글로벌 총판 네트워크와 철저한 ISO 검증 시스템을 바탕으로 고순도 색소, 염료, 유효 진정 활성 성분을 유통합니다.",
+                  "We distribute high-purity dyes, colorants, and active soothing ingredients based on a robust global master distributor network and certified ISO verification systems."
+                )}
               </p>
             </div>
           </div>
@@ -70,7 +76,9 @@ export default function Home({ onViewChange }: HomeProps) {
               className="bg-white/80 backdrop-blur-md hover:bg-white border border-slate-200/80 hover:border-indigo-200 shadow-sm hover:shadow-md rounded-2xl p-6 text-center transition-all duration-300 cursor-pointer group"
             >
               <Award className="w-6 h-6 mx-auto text-indigo-600 group-hover:scale-110 transition-transform mb-2.5 duration-300" />
-              <span className="block text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors duration-300">인사말</span>
+              <span className="block text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors duration-300">
+                {t("인사말", "CEO Greeting")}
+              </span>
             </button>
 
             <button
@@ -78,7 +86,9 @@ export default function Home({ onViewChange }: HomeProps) {
               className="bg-white/80 backdrop-blur-md hover:bg-white border border-slate-200/80 hover:border-indigo-200 shadow-sm hover:shadow-md rounded-2xl p-6 text-center transition-all duration-300 cursor-pointer group"
             >
               <Compass className="w-6 h-6 mx-auto text-indigo-600 group-hover:scale-110 transition-transform mb-2.5 duration-300" />
-              <span className="block text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors duration-300">원료도감</span>
+              <span className="block text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors duration-300">
+                {t("원료도감", "Ingredient Catalog")}
+              </span>
             </button>
 
             <button
@@ -86,7 +96,9 @@ export default function Home({ onViewChange }: HomeProps) {
               className="bg-white/80 backdrop-blur-md hover:bg-white border border-slate-200/80 hover:border-indigo-200 shadow-sm hover:shadow-md rounded-2xl p-6 text-center transition-all duration-300 cursor-pointer group"
             >
               <FileText className="w-6 h-6 mx-auto text-indigo-600 group-hover:scale-110 transition-transform mb-2.5 duration-300" />
-              <span className="block text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors duration-300">견적의뢰</span>
+              <span className="block text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors duration-300">
+                {t("견적의뢰", "Request Quote")}
+              </span>
             </button>
           </div>
 

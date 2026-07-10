@@ -6,12 +6,14 @@ import ProductSection from "./components/ProductSection";
 import InquiryForm from "./components/InquiryForm";
 import AdminPortal from "./components/AdminPortal";
 import { Mail, Phone, MapPin, Shield, Building, Globe } from "lucide-react";
+import { useLanguage } from "./contexts/LanguageContext";
 
 export default function App() {
   const [activeView, setActiveView] = useState("home");
   const [activeSubView, setActiveSubView] = useState("all");
   const [selectedProduct, setSelectedProduct] = useState("");
   const [isAdminDemo, setIsAdminDemo] = useState(false);
+  const { t } = useLanguage();
 
   const handleViewChange = (viewId: string, subId?: string) => {
     setActiveView(viewId);
@@ -90,41 +92,62 @@ export default function App() {
                   ST
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-bold text-base tracking-tight leading-none text-white">에스티트레이딩</span>
+                  <span className="font-bold text-base tracking-tight leading-none text-white">
+                    {t("에스티트레이딩", "ST Trading")}
+                  </span>
                   <span className="text-[9px] tracking-widest text-slate-500 uppercase mt-0.5">ST TRADING CO.</span>
                 </div>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-                에스티트레이딩은 글로벌 화장품 제조사들과의 견고한 원자재 유통 총판 네트워크를 토대로 
-                안전하고 검증된 고순도 기초 화학 원료 및 유효 진정 성분을 합리적인 단가에 공급합니다.
+                {t(
+                  "에스티트레이딩은 글로벌 화장품 제조사들과의 견고한 원자재 유통 총판 네트워크를 토대로 안전하고 검증된 고순도 기초 화학 원료 및 유효 진정 성분을 합리적인 단가에 공급합니다.",
+                  "ST Trading provides high-purity chemical raw materials and proven cosmetic active ingredients at competitive prices, backed by our solid distribution partnerships with global cosmetic manufacturers."
+                )}
               </p>
             </div>
 
             {/* Column 2: Legal Contacts */}
             <div className="md:col-span-4 space-y-4 text-xs">
-              <p className="text-white font-bold uppercase tracking-wider text-[10px]">CONTACT INFORMATION</p>
+              <p className="text-white font-bold uppercase tracking-wider text-[10px]">
+                {t("연락처 정보", "CONTACT INFORMATION")}
+              </p>
               <div className="space-y-2.5">
                 <div className="flex items-center space-x-2">
                   <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <span className="font-semibold text-slate-300">전화번호: 031-5196-6151</span>
+                  <span className="font-semibold text-slate-300">
+                    {t("전화번호: 031-5196-6151", "Tel: +82-31-5196-6151")}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <span>이메일: sttrading@naver.com</span>
+                  <span>
+                    {t("이메일: sttrading@naver.com", "Email: sttrading@naver.com")}
+                  </span>
                 </div>
                 <div className="flex items-start space-x-2">
                   <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" />
-                  <span className="leading-snug">본사: 경기도 안양시 만안구 덕천로152번길 25, 안양ISBIZ타워 729A호</span>
+                  <span className="leading-snug">
+                    {t(
+                      "본사: 경기도 안양시 만안구 덕천로152번길 25, 안양ISBIZ타워 729A호",
+                      "HQ: Rm 729A, Anyang ISBIZ Tower, 25 Deokcheon-ro 152beon-gil, Manan-gu, Anyang-si, Gyeonggi-do, Republic of Korea"
+                    )}
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Column 3: Quick Links */}
             <div className="md:col-span-3 space-y-4 text-xs">
-              <p className="text-white font-bold uppercase tracking-wider text-[10px]">BUSINESS INFO</p>
+              <p className="text-white font-bold uppercase tracking-wider text-[10px]">
+                {t("사업자 정보", "BUSINESS INFO")}
+              </p>
               <div className="space-y-1.5">
-                <p>사업자 등록번호: 134-23-69674</p>
-                <p>대표이사: 한상의</p>
+                <p>
+                  {t("사업자 등록번호: 134-23-69674", "Business Reg. No: 134-23-69674")}
+                </p>
+                <p>
+                  {t("대표이사: 한상의", "CEO: Han Sang-ui")}
+                </p>
                 <p className="text-[10px] text-slate-500 mt-2">Certified for High Purity Raw Material Logistics</p>
               </div>
             </div>
@@ -136,9 +159,15 @@ export default function App() {
             <p>© 2026 ST TRADING CO., LTD. All Rights Reserved.</p>
             
             <div className="flex space-x-4">
-              <button onClick={() => handleViewChange("company", "greeting")} className="hover:text-slate-300 transition-colors cursor-pointer">회사소개</button>
-              <button onClick={() => handleViewChange("product", "all")} className="hover:text-slate-300 transition-colors cursor-pointer">취급원료</button>
-              <button onClick={() => handleViewChange("inquiry")} className="hover:text-slate-300 transition-colors cursor-pointer">견적문의</button>
+              <button onClick={() => handleViewChange("company", "greeting")} className="hover:text-slate-300 transition-colors cursor-pointer">
+                {t("회사소개", "Company Info")}
+              </button>
+              <button onClick={() => handleViewChange("product", "all")} className="hover:text-slate-300 transition-colors cursor-pointer">
+                {t("취급원료", "Products")}
+              </button>
+              <button onClick={() => handleViewChange("inquiry")} className="hover:text-slate-300 transition-colors cursor-pointer">
+                {t("견적문의", "Inquiry")}
+              </button>
               <span className="text-slate-700">|</span>
               <span className="text-indigo-400 font-semibold uppercase tracking-wider text-[10px]">K-Beauty Partner</span>
             </div>

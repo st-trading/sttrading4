@@ -408,6 +408,19 @@ export const CEO_MESSAGE: CEOMessage = {
   signature: "에스티트레이딩 대표이사 드림"
 };
 
+export const CEO_MESSAGE_EN: CEOMessage = {
+  title: "With cleaner and superior raw materials,\nwe accompany K-Beauty's global leap.",
+  subtitle: "ST Trading supplies the best cosmetic raw materials based on honesty and precision.",
+  content: [
+    "Hello. I am the CEO of ST Trading.",
+    "In the rapidly changing global cosmetics market, Korean cosmetic brands and manufacturers are leading the world market by proving their technology and planning capabilities. In line with this, ST Trading carefully selects high-purity dyes, pigments, moisturizing ingredients, and proven high-functional raw materials from specialized manufacturing partners around the world and supplies them to our clients.",
+    "Beyond simply distributing raw materials, we want to become a business partner that provides a one-stop solution including 'technical support' and 'regulatory consulting' so that our clients can realize the best quality and texture they plan.",
+    "We regard honesty, trust, and a thorough quality control system as our top priorities in corporate management, and we will constantly strive to contribute to a sustainable cosmetics ecosystem by introducing eco-friendly raw materials and passing global safety standards.",
+    "We hope you will experience the joy of developing safe and differentiated products with ST Trading, which is setting the standard for cosmetic raw materials. Thank you."
+  ],
+  signature: "Sincerely, CEO of ST Trading Co., Ltd."
+};
+
 export const COMPANY_HISTORY: HistoryItem[] = [
   {
     year: "2026",
@@ -434,3 +447,31 @@ export const COMPANY_HISTORY: HistoryItem[] = [
     ]
   }
 ];
+
+export const COMPANY_HISTORY_EN: HistoryItem[] = [
+  {
+    year: "2026",
+    events: [
+      { month: "02", description: "Selected as an Exemplary Taxpayer of Gyeonggi-do in 2026" }
+    ]
+  },
+  {
+    year: "2023",
+    events: [
+      { month: "07", description: "Relocated office (Room 729A & B148, Anyang ISBIZ Tower, 25 Deokcheon-ro 152beon-gil, Manan-gu, Anyang-si, Gyeonggi-do)" }
+    ]
+  },
+  {
+    year: "2013",
+    events: [
+      { month: "12", description: "Relocated office (Room 222 & B118, 37-9 Pungjeon-ro, Danwon-gu, Ansan-si, Gyeonggi-do)" }
+    ]
+  },
+  {
+    year: "2006",
+    events: [
+      { month: "03", description: "Established ST Trading" }
+    ]
+  }
+];
+
