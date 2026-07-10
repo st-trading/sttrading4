@@ -93,10 +93,10 @@ export default function Navbar({
                 <span className="font-extrabold text-xl tracking-wider text-white">ST</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-lg tracking-tight leading-none text-slate-800">
+                <span className="font-black text-lg tracking-tight leading-none text-slate-950">
                   {t("에스티트레이딩", "ST Trading")}
                 </span>
-                <span className="text-[10px] tracking-widest text-slate-500 uppercase font-medium mt-1">ST TRADING CO.</span>
+                <span className="text-[10px] tracking-widest text-slate-500 uppercase font-semibold mt-1">ST TRADING CO.</span>
               </div>
             </div>
           </div>
