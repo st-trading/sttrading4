@@ -119,6 +119,29 @@ export default function InquiryForm({ selectedProduct, setSelectedProduct }: Inq
       // Add to Firestore database
       await addDoc(collection(db, "inquiries"), newInquiry);
       
+      // Submit to Formspree for central data collection
+      try {
+        await fetch("https://formspree.io/f/xaqgrnvr", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            companyName: companyName.trim(),
+            name: name.trim(),
+            email: email.trim(),
+            productName: productName.trim(),
+            message: message.trim(),
+            status: "pending",
+            createdAt: newInquiry.createdAt,
+            userId: user ? user.uid : "anonymous"
+          })
+        });
+      } catch (formspreeErr) {
+        console.error("Formspree submission failed, but Firestore succeeded:", formspreeErr);
+      }
+      
       setSubmitSuccess(true);
       
       // Clear inputs (except email & name if logged in)
