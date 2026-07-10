@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Calendar, Award, Copy, Check, ExternalLink } from "lucide-react";
 import { CEO_MESSAGE, COMPANY_HISTORY } from "../data/products";
 
