@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sttrading.pages.dev/sitemap.xml
+Sitemap: https://sttrading.pages.dev/robots.txt
