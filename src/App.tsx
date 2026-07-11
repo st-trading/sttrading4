@@ -15,6 +15,10 @@ export default function App() {
   const [isAdminDemo, setIsAdminDemo] = useState(false);
   const { t } = useLanguage();
 
+  React.useEffect(() => {
+    document.title = t("에스티트레이딩", "ST Trading");
+  }, [t]);
+
   const handleViewChange = (viewId: string, subId?: string) => {
     setActiveView(viewId);
     if (subId) {
