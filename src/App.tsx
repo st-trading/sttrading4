@@ -91,9 +91,37 @@ export default function App() {
             
             {/* Column 1: Brand & Desc */}
             <div className="md:col-span-5 space-y-4">
-              <div className="flex items-center space-x-3 text-white cursor-pointer" onClick={() => handleViewChange("home")}>
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-sky-400 flex items-center justify-center font-extrabold text-lg text-white">
-                  ST
+              <div className="flex items-center space-x-3 text-white cursor-pointer group/footer-logo" onClick={() => handleViewChange("home")}>
+                <div className="relative w-12 h-9 flex items-center justify-center shrink-0">
+                  <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path 
+                      d="M 4 4 L 34 4 A 16 16 0 0 1 34 36 L 4 36 Q 22 20 4 4 Z" 
+                      fill="url(#footer-logo-grad)" 
+                      className="opacity-25 blur-md transform translate-y-0.5" 
+                    />
+                    <path 
+                      d="M 1 4 L 31 4 A 16 16 0 0 1 31 36 L 1 36 Q 19 20 1 4 Z" 
+                      fill="url(#footer-trail-grad)" 
+                      className="opacity-40 transform translate-x-[-2px] group-hover/footer-logo:translate-x-[-4px] transition-transform duration-300" 
+                    />
+                    <path 
+                      d="M 4 4 L 34 4 A 16 16 0 0 1 34 36 L 4 36 Q 22 20 4 4 Z" 
+                      fill="url(#footer-logo-grad)" 
+                    />
+                    <defs>
+                      <linearGradient id="footer-logo-grad" x1="4" y1="4" x2="50" y2="36" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#4f46e5" />
+                        <stop offset="1" stopColor="#0ea5e9" />
+                      </linearGradient>
+                      <linearGradient id="footer-trail-grad" x1="1" y1="4" x2="47" y2="36" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#6366f1" stopOpacity="0.8" />
+                        <stop offset="1" stopColor="#38bdf8" stopOpacity="0.1" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <span className="relative font-black text-[15px] tracking-wider text-white z-10 select-none pl-2 transform group-hover/footer-logo:scale-105 transition-transform duration-300 italic">
+                    ST
+                  </span>
                 </div>
                 <div className="flex flex-col">
                   <span className="font-bold text-base tracking-tight leading-none text-white">
