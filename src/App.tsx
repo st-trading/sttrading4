@@ -137,6 +137,15 @@ export default function App() {
                     )}
                   </span>
                 </div>
+                <div className="flex items-start space-x-2">
+                  <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" />
+                  <span className="leading-snug">
+                    {t(
+                      "공장: 경기도 안양시 만안구 덕천로152번길 25, 안양ISBIZ타워 B148호",
+                      "Factory: Rm B148, Anyang ISBIZ Tower, 25 Deokcheon-ro 152beon-gil, Manan-gu, Anyang-si, Gyeonggi-do, Republic of Korea"
+                    )}
+                  </span>
+                </div>
               </div>
             </div>
 
