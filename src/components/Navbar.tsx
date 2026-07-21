@@ -87,13 +87,51 @@ export default function Navbar({
         <div className="flex items-center justify-between h-20">
           
           {/* Logo Section */}
-          <div className="flex items-center cursor-pointer" onClick={() => handleNavClick("home")}>
+          <div className="flex items-center cursor-pointer group/logo" onClick={() => handleNavClick("home")}>
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-sky-400 flex items-center justify-center shadow-md shadow-indigo-500/10">
-                <span className="font-extrabold text-xl tracking-wider text-white">ST</span>
+              <div className="relative w-14 h-10 flex items-center justify-center">
+                {/* Forward-stretching dynamic capsule shape matching user's requested style */}
+                <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* Outer glowing blur */}
+                  <path 
+                    d="M 4 4 L 34 4 A 16 16 0 0 1 34 36 L 4 36 Q 22 20 4 4 Z" 
+                    fill="url(#logo-grad)" 
+                    className="opacity-25 blur-md transform translate-y-0.5" 
+                  />
+                  
+                  {/* Speed/forward trail stretching out to the left */}
+                  <path 
+                    d="M 1 4 L 31 4 A 16 16 0 0 1 31 36 L 1 36 Q 19 20 1 4 Z" 
+                    fill="url(#trail-grad)" 
+                    className="opacity-40 transform translate-x-[-2px] group-hover/logo:translate-x-[-5px] transition-transform duration-300" 
+                  />
+                  
+                  {/* Main aerodynamic body with crescent cutout on left, rounded on right */}
+                  <path 
+                    d="M 4 4 L 34 4 A 16 16 0 0 1 34 36 L 4 36 Q 22 20 4 4 Z" 
+                    fill="url(#logo-grad)" 
+                    className="filter drop-shadow-[0_4px_6px_rgba(79,70,229,0.18)]" 
+                  />
+
+                  <defs>
+                    <linearGradient id="logo-grad" x1="4" y1="4" x2="50" y2="36" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#4f46e5" />
+                      <stop offset="1" stopColor="#0ea5e9" />
+                    </linearGradient>
+                    <linearGradient id="trail-grad" x1="1" y1="4" x2="47" y2="36" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#6366f1" stopOpacity="0.8" />
+                      <stop offset="1" stopColor="#38bdf8" stopOpacity="0.1" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                
+                {/* "ST" centered lettering (offset slightly right to account for left crescent cutout) */}
+                <span className="relative font-black text-[17px] tracking-wider text-white z-10 select-none pl-2.5 transform group-hover/logo:scale-105 transition-transform duration-300 italic">
+                  ST
+                </span>
               </div>
               <div className="flex flex-col">
-                <span className="font-black text-lg tracking-tight leading-none text-slate-950">
+                <span className="font-black text-lg tracking-tight leading-none text-slate-950 group-hover/logo:text-indigo-600 transition-colors">
                   {t("에스티트레이딩", "ST Trading")}
                 </span>
                 <span className="text-[10px] tracking-widest text-slate-500 uppercase font-semibold mt-1">ST TRADING CO.</span>
