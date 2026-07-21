@@ -13,6 +13,10 @@ export default function Company({ activeTab = "greeting", onSubViewChange }: Com
   const [copied, setCopied] = useState(false);
   const { language, t } = useLanguage();
 
+  const googleMapUrl = language === "en"
+    ? "https://www.google.com/maps/search/?api=1&query=Anyang+ISBIZ+Tower+729A"
+    : "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("경기도 안양시 만안구 덕천로152번길 25 안양IS비즈타워");
+
   const handleCopyAddress = () => {
     const addr = language === "en"
       ? "Suite 729A, Anyang ISBIZ Tower, 25 Deokcheon-ro 152beon-gil, Manan-gu, Anyang-si, Gyeonggi-do, Republic of Korea"
@@ -203,10 +207,20 @@ export default function Company({ activeTab = "greeting", onSubViewChange }: Com
                     href="https://map.naver.com/v5/search/%EA%B2%BD%EA%B8%B0%EB%8F%84%20%EC%95%88%EC%96%91%EC%8B%9C%20%EB%A7%8C%EC%95%88%EA%B5%AC%20%EB%8D%95%EC%B2%9C%EB%A1%9C152%EB%B2%88%EA%B8%B8%2025/address/14125867.756286242,4495574.630044569"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-1.5 px-4.5 py-2.5 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded-xl shadow-md shadow-green-500/10 transition-colors"
+                    className="inline-flex items-center space-x-1.5 px-4.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-500/10 transition-colors"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     <span>{t("네이버 지도에서 보기", "View on Naver Map")}</span>
+                  </a>
+
+                  <a
+                    href={googleMapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center space-x-1.5 px-4.5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-600/10 transition-colors"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>{t("구글 지도에서 보기", "View on Google Maps")}</span>
                   </a>
                 </div>
               </div>
@@ -217,72 +231,34 @@ export default function Company({ activeTab = "greeting", onSubViewChange }: Com
                 {/* Visual map preview block */}
                 <div className="lg:col-span-8 rounded-3xl overflow-hidden border border-slate-200/80 shadow-md h-[400px] relative bg-slate-50 flex flex-col">
                   
-                  {/* Interactive clean SVG Map representing ISBIZ Tower location */}
-                  <div className="flex-1 relative overflow-hidden bg-slate-100/90 flex items-center justify-center p-4">
+                  {/* Google Map Container with interactive zoom/pan & redirect click */}
+                  <div className="flex-1 relative overflow-hidden bg-slate-100 flex items-center justify-center min-h-[300px]">
+                    <iframe
+                      src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                        language === "en"
+                          ? "Suite 729A, Anyang ISBIZ Tower, 25 Deokcheon-ro 152beon-gil, Manan-gu, Anyang-si"
+                          : "경기도 안양시 만안구 덕천로152번길 25 안양IS비즈타워"
+                      )}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
+                      className="w-full h-full border-0 absolute inset-0"
+                      allowFullScreen={true}
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      title="Google Map"
+                    />
                     
-                    {/* Clean SVG visual road layout */}
-                    <svg className="absolute inset-0 w-full h-full text-slate-300" xmlns="http://www.w3.org/2000/svg">
-                      {/* Background grid */}
-                      <defs>
-                        <pattern id="map-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" strokeWidth="1"/>
-                        </pattern>
-                      </defs>
-                      <rect width="100%" height="100%" fill="url(#map-grid)" />
-
-                      {/* Rivers / Greenery representation */}
-                      <path d="M-10,340 C150,330 300,280 500,290 C600,295 700,320 900,340 L900,410 L-10,410 Z" fill="#e2f1e4" opacity="0.8" />
-                      <text x="350" y="370" fill="#8fba97" className="text-[11px] font-bold tracking-wider font-sans">
-                        {t("안양천", "Anyang Stream")}
-                      </text>
-
-                      {/* High speed/major roads */}
-                      <line x1="120" y1="-10" x2="120" y2="420" stroke="#cbd5e1" strokeWidth="24" />
-                      <line x1="120" y1="-10" x2="120" y2="420" stroke="#f8fafc" strokeWidth="16" />
-                      
-                      {/* Secondary roads */}
-                      <line x1="-10" y1="180" x2="910" y2="180" stroke="#cbd5e1" strokeWidth="20" />
-                      <line x1="-10" y1="180" x2="910" y2="180" stroke="#f8fafc" strokeWidth="12" />
-
-                      {/* 덕천로 152번길 */}
-                      <line x1="450" y1="180" x2="450" y2="340" stroke="#94a3b8" strokeWidth="16" />
-                      <line x1="450" y1="180" x2="450" y2="340" stroke="#f1f5f9" strokeWidth="10" />
-
-                      {/* Labels for roads */}
-                      <text x="110" y="80" fill="#94a3b8" transform="rotate(-90 110 80)" className="text-[10px] font-bold tracking-wide font-sans">
-                        Deokcheon-ro / 덕천로
-                      </text>
-                      <text x="250" y="174" fill="#94a3b8" className="text-[10px] font-bold tracking-wide font-sans">
-                        {t("덕천로 152번길", "Deokcheon-ro 152beon-gil")}
-                      </text>
-
-                      {/* Metro Stations */}
-                      <g transform="translate(120, 40)">
-                        <rect x="-40" y="-12" width="80" height="24" rx="6" fill="#1e3a8a" />
-                        <text x="0" y="4" fill="#ffffff" textAnchor="middle" className="text-[10px] font-bold font-sans">
-                          {t("명학역 (1호선)", "Myeonghak Stn (L1)")}
-                        </text>
-                      </g>
-                      <line x1="120" y1="40" x2="450" y2="240" stroke="#6366f1" strokeWidth="2" strokeDasharray="4 4" />
-
-                      {/* Target Landmark Anchor: 안양ISBIZ타워 */}
-                      <g transform="translate(450, 240)">
-                        {/* Pulsing ring */}
-                        <circle r="22" fill="#6366f1" className="animate-ping opacity-25" />
-                        <circle r="12" fill="#6366f1" opacity="0.15" />
-                        <circle r="6" fill="#4f46e5" />
-                      </g>
-                    </svg>
-
-                    {/* Highly readable map popover card over the exact point */}
-                    <div className="absolute top-[160px] left-[50%] -translate-x-1/2 bg-white rounded-2xl p-4 shadow-xl border border-indigo-100 flex flex-col items-center max-w-[240px] text-center z-10">
-                      <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mb-2">
-                        <MapPin className="w-4 h-4" />
+                    {/* Hover and Click Overlay to redirect to Google Maps */}
+                    <a
+                      href={googleMapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute inset-0 bg-slate-900/0 hover:bg-slate-900/20 transition-all duration-300 flex items-center justify-center group z-10"
+                    >
+                      <div className="opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 bg-white/95 backdrop-blur-sm px-4.5 py-2.5 rounded-2xl shadow-lg border border-slate-100 flex items-center space-x-2 text-xs font-bold text-slate-800 pointer-events-none">
+                        <MapPin className="w-4 h-4 text-indigo-600 animate-bounce" />
+                        <span>{t("구글 지도에서 크게 보기", "Open in Google Maps")}</span>
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                       </div>
-                      <h5 className="text-xs font-extrabold text-slate-800 leading-none">{t("안양ISBIZ타워", "Anyang ISBIZ Tower")}</h5>
-                      <p className="text-[10px] text-indigo-600 font-bold mt-1">{t("729A호 에스티트레이딩", "Suite 729A, ST Trading")}</p>
-                      <p className="text-[9px] text-slate-400 mt-1 leading-snug">{t("안양시 만안구 덕천로152번길 25", "25 Deokcheon-ro 152beon-gil")}</p>
-                    </div>
+                    </a>
                   </div>
 
                   {/* Bottom info bar */}
