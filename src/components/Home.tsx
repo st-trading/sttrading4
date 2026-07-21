@@ -1,107 +1,216 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Award, FileText, Compass } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
-const bannerImg = "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200&auto=format&fit=crop";
-const bgImg = "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1600&auto=format&fit=crop";
+// Define custom professional background images from public directory
+const slides = [
+  {
+    id: 1,
+    img: "/images/bg_pink_1784608963607.jpg",
+    titleKo: "최상위 화장품 원료 소싱 및 연구 개발",
+    titleEn: "Top-Tier Cosmetics Raw Materials Sourcing & R&D"
+  },
+  {
+    id: 2,
+    img: "/images/bg_blue_1784608947042.jpg",
+    titleKo: "엄격한 규격 관리 기반의 고순도 유효 성분",
+    titleEn: "High-Purity Active Ingredients under Strict Standard Control"
+  },
+  {
+    id: 3,
+    img: "/images/bg_leaves_1784608977344.jpg",
+    titleKo: "혁신적인 처방과 맞춤형 원료 솔루션",
+    titleEn: "Innovative Formulations & Customized Ingredient Solutions"
+  },
+  {
+    id: 4,
+    img: "/images/bg_gray_1784608929625.jpg",
+    titleKo: "지속 가능한 100% 비건 및 친환경 바이오 원료",
+    titleEn: "Sustainable 100% Vegan & Eco-Friendly Bio-Ingredients"
+  }
+];
 
 interface HomeProps {
   onViewChange: (view: string, subView?: string) => void;
 }
 
 export default function Home({ onViewChange }: HomeProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [currentIdx, setCurrentIdx] = useState(0);
+  
+  const SLIDE_DURATION = 6000; // 6 seconds per slide transition
+
+  const handleNext = useCallback(() => {
+    setCurrentIdx((prev) => (prev + 1) % slides.length);
+  }, []);
+
+  // Set up high-reliability slideshow autoplay
+  useEffect(() => {
+    const timer = setInterval(() => {
+      handleNext();
+    }, SLIDE_DURATION);
+
+    return () => clearInterval(timer);
+  }, [handleNext]);
+
+  const selectSlide = (index: number) => {
+    setCurrentIdx(index);
+  };
+
+  const activeSlide = slides[currentIdx];
 
   return (
     <div 
-      className="py-16 min-h-[80vh] flex flex-col justify-center relative bg-cover bg-center"
-      style={{ backgroundImage: `url(${bgImg})` }}
+      className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden bg-slate-50 py-12 lg:py-0"
     >
-      {/* Very light overlay to preserve the soft, dreamy high-key light of the uploaded image without blocking it */}
-      <div className="absolute inset-0 bg-white/20 z-0" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+      {/* 1. Full-Bleed Background Slideshow */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIdx}
+            initial={{ opacity: 0, scale: 1.01 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.99 }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <img
+              src={activeSlide.img}
+              alt={language === "en" ? activeSlide.titleEn : activeSlide.titleKo}
+              className="w-full h-full object-cover object-center"
+              referrerPolicy="no-referrer"
+            />
+          </motion.div>
+        </AnimatePresence>
         
-        <div className="space-y-12">
-          
-          {/* Main Photo Banner Frame */}
-          <div className="relative group rounded-3xl overflow-hidden border border-slate-200/60 bg-white/50 shadow-xl shadow-slate-200/40 flex flex-col justify-between min-h-[420px] lg:min-h-[520px]">
-            {/* Aspect ratio frame containing our high quality generated raw materials image */}
-            <div className="absolute inset-0 w-full h-full">
-              <img
-                src={bannerImg}
-                alt="Cosmetics Raw Materials - ST Trading"
-                className="w-full h-full object-cover opacity-90 group-hover:scale-[1.01] transition-transform duration-[1.5s] ease-out"
-                referrerPolicy="no-referrer"
-              />
-              {/* Soft white gradient overlay to blend description beautifully with background */}
-              <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
-            </div>
+        {/* Soft left-to-right gradient on desktop to secure text contrast, leaving the rest completely transparent */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/60 via-white/10 to-transparent hidden lg:block" />
+        
+        {/* Balanced overall overlay on mobile for strong contrast */}
+        <div className="absolute inset-0 bg-white/25 lg:hidden" />
+      </div>
 
-            {/* Top Badge */}
-            <div className="relative z-10 p-6 flex justify-end items-start">
-              <span className="text-[10px] font-bold text-slate-500 font-mono bg-white/95 px-3 py-1 rounded-full border border-slate-200/80 shadow-sm">
-                ST-TR-2026
+      {/* 2. Main Content Layout Container */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-6 sm:py-12">
+          
+          {/* Left Column: Premium Text Content and Slide Controls */}
+          <div className="col-span-1 lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 lg:space-y-8 bg-white/60 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-6 sm:p-10 lg:p-0 rounded-3xl border border-white/30 lg:border-none shadow-lg lg:shadow-none max-w-xl mx-auto lg:mx-0">
+            
+            {/* Premium Corporate Badge */}
+            <div className="inline-flex">
+               <span className="text-[10px] sm:text-xs font-bold tracking-widest px-4 py-1.5 rounded-full border shadow-sm font-mono uppercase bg-indigo-50/95 text-indigo-700 border-indigo-200/80">
+                ACTIVE INGREDIENT TOTAL DISTRIBUTION
               </span>
             </div>
 
-            {/* Bottom Brand Caption Overlap */}
-            <div className="relative z-10 p-8 sm:p-12 pt-24 bg-gradient-to-t from-white/95 via-white/80 to-transparent">
-              <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse" />
-                <span className="text-xs font-bold text-indigo-600 tracking-wider uppercase">
-                  ACTIVE INGREDIENT TOTAL DISTRIBUTION
-                </span>
-              </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mt-3 text-slate-900 leading-tight animate-fade-in">
-                {t("최상위 화장품 원료 파트너,", "Premier Cosmetic Ingredients Partner,")}<br />
-                <span className="bg-gradient-to-r from-indigo-600 to-sky-600 bg-clip-text text-transparent">
-                  {t("에스티트레이딩", "ST Trading")}
-                </span>
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-600 mt-4 max-w-2xl leading-relaxed font-medium">
-                {t(
-                  "글로벌 총판 네트워크와 철저한 ISO 검증 시스템을 바탕으로 고순도 색소, 염료, 유효 진정 활성 성분을 유통합니다.",
-                  "We distribute high-purity dyes, colorants, and active soothing ingredients based on a robust global master distributor network and certified ISO verification systems."
-                )}
-              </p>
+            {/* Main Display Headline */}
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              {t("최상위 화장품 원료 파트너, 에스티트레이딩", "Top-Tier Cosmetics Partner, ST Trading")}
+            </h1>
+
+            {/* Detailed Paragraph Descriptor */}
+            <p className="text-xs sm:text-sm md:text-base text-slate-700 font-semibold leading-relaxed max-w-lg">
+              {t(
+                "글로벌 총판 네트워크와 철저한 ISO 검증 시스템을 바탕으로 고순도 색소, 염료, 유효 진정 활성 성분을 유통합니다.",
+                "Based on our global distribution network and thorough ISO verification system, we distribute high-purity pigments, dyes, and effective soothing active ingredients."
+              )}
+            </p>
+
+            {/* Page indicator dots aligned left on desktop */}
+            <div className="flex items-center space-x-3.5 pt-2">
+              {slides.map((slide, index) => {
+                const isActive = index === currentIdx;
+                return (
+                  <button
+                    key={slide.id}
+                     onClick={() => selectSlide(index)}
+                    className="w-7 h-7 rounded-full flex items-center justify-center focus:outline-none cursor-pointer bg-transparent border-none group relative"
+                    title={`Go to slide ${index + 1}`}
+                  >
+                    {isActive && (
+                      <motion.span 
+                        layoutId="activeDotRing"
+                        className="absolute inset-0 rounded-full border-2 border-indigo-600"
+                        transition={{ type: "spring", stiffness: 300, damping: 28 }}
+                      />
+                    )}
+                    <span className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                      isActive 
+                        ? "bg-indigo-600 scale-110" 
+                        : "bg-slate-500 group-hover:bg-indigo-600"
+                    }`} />
+                  </button>
+                );
+              })}
             </div>
+
+            {/* Desktop Navigation Shortcut row */}
+            <div className="hidden lg:flex items-center space-x-4 pt-4 w-full">
+              <button
+                onClick={() => onViewChange("company", "greeting")}
+                className="flex-1 bg-white hover:bg-slate-50 text-slate-800 font-bold py-3.5 px-6 rounded-xl border border-slate-200/80 shadow-sm transition-all duration-200 flex items-center justify-center space-x-2 text-sm hover:shadow-md cursor-pointer"
+              >
+                <Award className="w-4 h-4 text-indigo-600" />
+                <span>{t("인사말", "CEO Greeting")}</span>
+              </button>
+              <button
+                onClick={() => onViewChange("product", "all")}
+                className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-sm transition-all duration-200 flex items-center justify-center space-x-2 text-sm hover:shadow-md cursor-pointer"
+              >
+                <Compass className="w-4 h-4 text-white" />
+                <span>{t("원료도감", "Ingredient Catalog")}</span>
+              </button>
+              <button
+                onClick={() => onViewChange("inquiry")}
+                className="flex-1 bg-white hover:bg-slate-50 text-slate-800 font-bold py-3.5 px-6 rounded-xl border border-slate-200/80 shadow-sm transition-all duration-200 flex items-center justify-center space-x-2 text-sm hover:shadow-md cursor-pointer"
+              >
+                <FileText className="w-4 h-4 text-indigo-600" />
+                <span>{t("견적의뢰", "Request Quote")}</span>
+              </button>
+            </div>
+
           </div>
 
-          {/* Quick Portals Links Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto pt-2">
+          {/* Right Column: Kept completely empty to allow the beautiful cosmetic bottles and raw materials in the background to be fully seen */}
+          <div className="hidden lg:block lg:col-span-5 h-full min-h-[300px]" />
+
+        </div>
+
+        {/* Mobile Navigation Shortcut row */}
+        <div className="lg:hidden w-full pt-4 max-w-md mx-auto">
+          <div className="grid grid-cols-3 gap-3 w-full">
             <button
               onClick={() => onViewChange("company", "greeting")}
-              className="bg-white/80 backdrop-blur-md hover:bg-white border border-slate-200/80 hover:border-indigo-200 shadow-sm hover:shadow-md rounded-2xl p-6 text-center transition-all duration-300 cursor-pointer group"
+              className="bg-white/80 backdrop-blur-md active:bg-white border border-white/60 shadow-md rounded-2xl p-4 text-center transition-all cursor-pointer flex flex-col items-center justify-center space-y-1"
             >
-              <Award className="w-6 h-6 mx-auto text-indigo-600 group-hover:scale-110 transition-transform mb-2.5 duration-300" />
-              <span className="block text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors duration-300">
+              <Award className="w-5 h-5 text-indigo-600" />
+              <span className="block text-[11px] font-extrabold text-slate-800">
                 {t("인사말", "CEO Greeting")}
               </span>
             </button>
 
             <button
-              onClick={() => onViewChange("product", "all")}
-              className="bg-white/80 backdrop-blur-md hover:bg-white border border-slate-200/80 hover:border-indigo-200 shadow-sm hover:shadow-md rounded-2xl p-6 text-center transition-all duration-300 cursor-pointer group"
+               onClick={() => onViewChange("product", "all")}
+              className="bg-white/80 backdrop-blur-md active:bg-white border border-white/60 shadow-md rounded-2xl p-4 text-center transition-all cursor-pointer flex flex-col items-center justify-center space-y-1"
             >
-              <Compass className="w-6 h-6 mx-auto text-indigo-600 group-hover:scale-110 transition-transform mb-2.5 duration-300" />
-              <span className="block text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors duration-300">
+              <Compass className="w-5 h-5 text-indigo-600" />
+              <span className="block text-[11px] font-extrabold text-slate-800">
                 {t("원료도감", "Ingredient Catalog")}
               </span>
             </button>
 
             <button
               onClick={() => onViewChange("inquiry")}
-              className="bg-white/80 backdrop-blur-md hover:bg-white border border-slate-200/80 hover:border-indigo-200 shadow-sm hover:shadow-md rounded-2xl p-6 text-center transition-all duration-300 cursor-pointer group"
+              className="bg-white/80 backdrop-blur-md active:bg-white border border-white/60 shadow-md rounded-2xl p-4 text-center transition-all cursor-pointer flex flex-col items-center justify-center space-y-1"
             >
-              <FileText className="w-6 h-6 mx-auto text-indigo-600 group-hover:scale-110 transition-transform mb-2.5 duration-300" />
-              <span className="block text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors duration-300">
+              <FileText className="w-5 h-5 text-indigo-600" />
+              <span className="block text-[11px] font-extrabold text-slate-800">
                 {t("견적의뢰", "Request Quote")}
               </span>
             </button>
           </div>
-
         </div>
 
       </div>
