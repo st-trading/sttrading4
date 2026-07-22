@@ -9,9 +9,9 @@ const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/st-trading/sttrading4
 const slides = [
   {
     id: 1,
-    img: "/images/첫째.jpg",
+    img: "/images/두번째.jpg",
     fallbackImg: "/images/slide1.jpg",
-    rawUrl: `${GITHUB_RAW_BASE}/%EC%B2%AB%EC%A7%B8.jpg`,
+    rawUrl: `${GITHUB_RAW_BASE}/%EB%91%90%EB%B2%88%EC%A7%B8.jpg`,
     unsplashFallback: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=2000&q=80",
     titleKo: "최상위 화장품 원료 파트너,\n에스티트레이딩",
     titleEn: "Top-Tier Cosmetics Ingredients Partner, ST Trading",
