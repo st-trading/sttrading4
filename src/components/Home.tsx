@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Award, FileText, Compass } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
-// Define main slides using direct external Unsplash image URLs as requested by user
+// Define main slides using optimized local webp assets with remote fallbacks for instant 0-lag rendering
 const slides = [
   {
     id: 1,
-    img: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/ayush-kumar-On85vnEHpjU-unsplash.jpg",
-    rawUrl: "https://github.com/st-trading/sttrading4/raw/main/public/images/ayush-kumar-On85vnEHpjU-unsplash.jpg",
+    img: "/images/slide1.webp",
+    fallbackImg: "/images/slide1_opt.jpg",
+    rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/ayush-kumar-On85vnEHpjU-unsplash.jpg",
     titleKo: "최상위 화장품 원료 파트너, 에스티트레이딩",
     titleEn: "Top-Tier Cosmetics Ingredients Partner, ST Trading",
     descKo: "글로벌 총판 네트워크와 철저한 ISO 검증 시스템을 바탕으로 고순도 색소, 염료, 유효 진정 활성 성분을 유통합니다.",
@@ -16,8 +17,9 @@ const slides = [
   },
   {
     id: 2,
-    img: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/kate-glotova-ZkZkWq8cxHo-unsplash.jpg",
-    rawUrl: "https://github.com/st-trading/sttrading4/raw/main/public/images/kate-glotova-ZkZkWq8cxHo-unsplash.jpg",
+    img: "/images/slide2.webp",
+    fallbackImg: "/images/slide2_opt.jpg",
+    rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/kate-glotova-ZkZkWq8cxHo-unsplash.jpg",
     titleKo: "엄격한 규격 관리 기반의 고순도 유효 성분",
     titleEn: "High-Purity Active Ingredients under Strict Standard Control",
     descKo: "엄격한 정밀 규격 분석을 통해 원료의 안전성과 생리 활성 효능을 극대화하여 신뢰성 높은 성분을 유통합니다.",
@@ -25,8 +27,9 @@ const slides = [
   },
   {
     id: 3,
-    img: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/maria-lupan-CD8_3hYj-Vc-unsplash.jpg",
-    rawUrl: "https://github.com/st-trading/sttrading4/raw/main/public/images/maria-lupan-CD8_3hYj-Vc-unsplash.jpg",
+    img: "/images/slide3.webp",
+    fallbackImg: "/images/slide3_opt.jpg",
+    rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/maria-lupan-CD8_3hYj-Vc-unsplash.jpg",
     titleKo: "혁신적인 처방과 맞춤형 원료 솔루션",
     titleEn: "Innovative Formulations & Customized Ingredient Solutions",
     descKo: "고객사의 아이디어를 실현하는 독자적이고 트렌디한 처방 솔루션과 최적화된 맞춤형 원료 매칭 가이드를 제공합니다.",
@@ -34,8 +37,9 @@ const slides = [
   },
   {
     id: 4,
-    img: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/chuttersnap-lQOkpEkMRfk-unsplash.jpg",
-    rawUrl: "https://github.com/st-trading/sttrading4/raw/main/public/images/chuttersnap-lQOkpEkMRfk-unsplash.jpg",
+    img: "/images/slide4.webp",
+    fallbackImg: "/images/slide4_opt.jpg",
+    rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/chuttersnap-lQOkpEkMRfk-unsplash.jpg",
     titleKo: "지속 가능한 100% 비건 및 친환경 원료",
     titleEn: "Sustainable 100% Vegan & Eco-Friendly Raw Materials",
     descKo: "환경을 생각하는 식물성 비건 인증 원료 성분으로 클린뷰티의 미래를 선도합니다.",
@@ -84,15 +88,24 @@ export default function Home({ onViewChange }: HomeProps) {
     <div 
       className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden py-12 lg:py-0"
     >
-      {/* 1. Full-Bleed Background Slideshow with subtle dark contrast gradient overlay */}
-      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-900">
+      {/* 1. Full-Bleed Background Slideshow with zoom-out image effect & dark overlay */}
+      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950">
         {slides.map((slide, index) => {
           const isActive = index === currentIdx;
           return (
-            <div
+            <motion.div
               key={slide.id}
-              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-                isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+              initial={{ opacity: 0, scale: 1.12 }}
+              animate={{
+                opacity: isActive ? 1 : 0,
+                scale: isActive ? 1.0 : 1.12,
+              }}
+              transition={{
+                opacity: { duration: 1.0, ease: "easeInOut" },
+                scale: { duration: 8.0, ease: "linear" },
+              }}
+              className={`absolute inset-0 w-full h-full will-change-transform ${
+                isActive ? "z-10" : "z-0 pointer-events-none"
               }`}
             >
               <img
@@ -102,12 +115,17 @@ export default function Home({ onViewChange }: HomeProps) {
                 loading="eager"
                 decoding="async"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/images/bg_gray_1784608929625.jpg";
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== slide.fallbackImg) {
+                    target.src = slide.fallbackImg;
+                  } else if (target.src !== slide.rawUrl) {
+                    target.src = slide.rawUrl;
+                  }
                 }}
               />
-              {/* Soft gradient overlay to enhance background depth */}
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-900/30 via-slate-900/10 to-transparent pointer-events-none" />
-            </div>
+              {/* Soft dark gradient overlay for crisp white text legibility */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/55 pointer-events-none" />
+            </motion.div>
           );
         })}
       </div>
@@ -115,34 +133,27 @@ export default function Home({ onViewChange }: HomeProps) {
       {/* 2. Main Content Layout Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col justify-between min-h-[82vh] py-8 sm:py-12">
         
-        {/* Top/Middle: Main Hero Text Area (Shifted slightly lower with top padding) */}
-        <div className="w-full flex flex-col items-center text-center max-w-3xl mx-auto pt-10 sm:pt-16 lg:pt-24 space-y-5">
+        {/* Top/Middle: Main Hero Text Area */}
+        <div className="w-full flex flex-col items-center text-center max-w-4xl mx-auto pt-14 sm:pt-20 lg:pt-28 space-y-5">
           
-          {/* Corporate Badge */}
-          <div className="inline-flex">
-            <span className="text-[10px] sm:text-xs font-bold tracking-widest px-4 py-1.5 rounded-full border border-white/90 shadow-sm font-mono uppercase bg-white/90 backdrop-blur-sm text-indigo-800">
-              ACTIVE INGREDIENT TOTAL DISTRIBUTION
-            </span>
-          </div>
-
           {/* Dynamic Text Area with smooth cross-fade animation */}
-          <div className="w-full min-h-[120px] sm:min-h-[140px] flex flex-col justify-center text-center">
+          <div className="w-full min-h-[140px] sm:min-h-[170px] flex flex-col justify-center text-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIdx}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.35, ease: "easeInOut" }}
-                className="space-y-3 lg:space-y-4"
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="space-y-4 sm:space-y-5"
               >
                 {/* Main Display Headline */}
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-950 leading-tight [text-shadow:_0_1px_10px_rgba(255,255,255,0.95),_0_2px_20px_rgba(255,255,255,0.8)]">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight [text-shadow:_0_2px_12px_rgba(0,0,0,0.6)]">
                   {language === "en" ? activeSlide.titleEn : activeSlide.titleKo}
                 </h1>
 
                 {/* Detailed Paragraph Descriptor */}
-                <p className="text-xs sm:text-sm md:text-base text-slate-900 font-semibold leading-relaxed max-w-2xl mx-auto [text-shadow:_0_1px_8px_rgba(255,255,255,0.95)]">
+                <p className="text-base sm:text-lg lg:text-xl text-white/95 font-medium leading-relaxed max-w-3xl mx-auto [text-shadow:_0_1px_8px_rgba(0,0,0,0.6)]">
                   {language === "en" ? activeSlide.descEn : activeSlide.descKo}
                 </p>
               </motion.div>
