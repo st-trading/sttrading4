@@ -11,7 +11,7 @@ const slides = [
     fallbackImg: "./images/slide1.jpg",
     rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/ayush-kumar-On85vnEHpjU-unsplash.jpg",
     unsplashFallback: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=2000&q=80",
-    titleKo: "최상위 화장품 원료 파트너, 에스티트레이딩",
+    titleKo: "최상위 화장품 원료 파트너,\n에스티트레이딩",
     titleEn: "Top-Tier Cosmetics Ingredients Partner, ST Trading",
     descKo: "글로벌 총판 네트워크와 철저한 ISO 검증 시스템을 바탕으로 고순도 색소, 염료, 유효 진정 활성 성분을 유통합니다.",
     descEn: "We distribute high-purity pigments, dyes, and active soothing ingredients based on a global distribution network and strict ISO verification system."
@@ -58,6 +58,7 @@ interface HomeProps {
 export default function Home({ onViewChange }: HomeProps) {
   const { t, language } = useLanguage();
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [hasChangedSlide, setHasChangedSlide] = useState(false);
   
   const SLIDE_DURATION = 8000; // 8 seconds per slide transition as requested
 
@@ -74,6 +75,7 @@ export default function Home({ onViewChange }: HomeProps) {
   }, []);
 
   const handleNext = useCallback(() => {
+    setHasChangedSlide(true);
     setCurrentIdx((prev) => (prev + 1) % slides.length);
   }, []);
 
@@ -87,6 +89,7 @@ export default function Home({ onViewChange }: HomeProps) {
   }, [handleNext]);
 
   const selectSlide = (index: number) => {
+    setHasChangedSlide(true);
     setCurrentIdx(index);
   };
 
@@ -96,10 +99,12 @@ export default function Home({ onViewChange }: HomeProps) {
     <div 
       className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden py-12 lg:py-0"
     >
-      {/* 1. Full-Bleed Background Slideshow with hardware-accelerated zoom-out image effect & dark overlay */}
-      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950">
+      {/* 1. Full-Bleed Background Slideshow with instant initial load & smooth hardware-accelerated zoom-out */}
+      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-900">
         {slides.map((slide, index) => {
           const isActive = index === currentIdx;
+          const isInitialSlide = index === 0 && !hasChangedSlide;
+
           return (
             <div
               key={slide.id}
@@ -107,9 +112,11 @@ export default function Home({ onViewChange }: HomeProps) {
                 isActive ? "z-10 opacity-100" : "z-0 opacity-0 pointer-events-none"
               }`}
               style={{
-                transition: isActive 
-                  ? "opacity 1000ms ease-in-out, transform 8000ms cubic-bezier(0.25, 1, 0.5, 1)"
-                  : "opacity 1000ms ease-in-out, transform 0ms",
+                transition: isInitialSlide
+                  ? "none"
+                  : isActive 
+                    ? "opacity 1000ms ease-in-out, transform 8000ms cubic-bezier(0.25, 1, 0.5, 1)"
+                    : "opacity 1000ms ease-in-out, transform 0ms",
                 transform: isActive ? "scale(1.0) translateZ(0)" : "scale(1.08) translateZ(0)",
                 willChange: "opacity, transform",
                 backfaceVisibility: "hidden",
@@ -119,8 +126,8 @@ export default function Home({ onViewChange }: HomeProps) {
                 src={slide.img}
                 alt={language === "en" ? slide.titleEn : slide.titleKo}
                 className="w-full h-full object-cover object-center lg:object-right"
-                loading="eager"
-                decoding="async"
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding={index === 0 ? "sync" : "async"}
                 style={{
                   transform: "translateZ(0)",
                   backfaceVisibility: "hidden",
@@ -168,12 +175,12 @@ export default function Home({ onViewChange }: HomeProps) {
                 className="space-y-4 sm:space-y-5"
               >
                 {/* Main Display Headline */}
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight [text-shadow:_0_2px_12px_rgba(0,0,0,0.6)]">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight whitespace-pre-line break-keep [text-shadow:_0_2px_12px_rgba(0,0,0,0.6)]">
                   {language === "en" ? activeSlide.titleEn : activeSlide.titleKo}
                 </h1>
 
                 {/* Detailed Paragraph Descriptor */}
-                <p className="text-base sm:text-lg lg:text-xl text-white/95 font-medium leading-relaxed max-w-3xl mx-auto [text-shadow:_0_1px_8px_rgba(0,0,0,0.6)]">
+                <p className="text-base sm:text-lg lg:text-xl text-white/95 font-medium leading-relaxed max-w-3xl mx-auto break-keep [text-shadow:_0_1px_8px_rgba(0,0,0,0.6)]">
                   {language === "en" ? activeSlide.descEn : activeSlide.descKo}
                 </p>
               </motion.div>
