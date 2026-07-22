@@ -95,21 +95,24 @@ export default function Home({ onViewChange }: HomeProps) {
   };
 
   const activeSlide = slides[currentIdx];
+  const firstSlideImgUrl = encodeURI(slides[0].img);
+  const firstSlideFallbackUrl = encodeURI(slides[0].fallbackImg);
 
   return (
     <div 
-      className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden py-12 lg:py-0"
+      className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden py-12 lg:py-0 bg-slate-900"
     >
       {/* 1. Full-Bleed Background Slideshow with instant initial load & smooth hardware-accelerated zoom-out */}
       <div 
-        className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-900 bg-cover bg-center"
+        className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url("${slides[0].img}"), url("${slides[0].fallbackImg}")`,
+          backgroundImage: `url("${firstSlideImgUrl}"), url("${firstSlideFallbackUrl}")`,
         }}
       >
         {slides.map((slide, index) => {
           const isActive = index === currentIdx;
           const isInitialSlide = index === 0 && !hasChangedSlide;
+          const slideImgUrl = encodeURI(slide.img);
 
           return (
             <div
@@ -129,11 +132,12 @@ export default function Home({ onViewChange }: HomeProps) {
               }}
             >
               <img
-                src={slide.img}
+                src={slideImgUrl}
                 alt={language === "en" ? slide.titleEn : slide.titleKo}
                 className="w-full h-full object-cover object-center lg:object-right"
                 loading={index === 0 ? "eager" : "lazy"}
                 decoding={index === 0 ? "sync" : "async"}
+                fetchPriority={index === 0 ? "high" : "auto"}
                 style={{
                   transform: "translateZ(0)",
                   backfaceVisibility: "hidden",
