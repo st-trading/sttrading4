@@ -3,15 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Award, FileText, Compass } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
-// Define main slides using optimized local assets with multi-tier fallbacks for instant 0-lag rendering
-const FIRST_SLIDE_IMAGE = "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/%EC%B2%AB%EC%A7%B8.jpg";
+// Define main slides using local static assets for instant 0-lag rendering with multi-tier fallbacks
+const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images";
 
 const slides = [
   {
     id: 1,
-    img: FIRST_SLIDE_IMAGE,
-    fallbackImg: "./images/slide1.jpg",
-    rawUrl: FIRST_SLIDE_IMAGE,
+    img: "/images/첫째.jpg",
+    fallbackImg: "/images/slide1.jpg",
+    rawUrl: `${GITHUB_RAW_BASE}/%EC%B2%AB%EC%A7%B8.jpg`,
     unsplashFallback: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=2000&q=80",
     titleKo: "최상위 화장품 원료 파트너,\n에스티트레이딩",
     titleEn: "Top-Tier Cosmetics Ingredients Partner, ST Trading",
@@ -20,9 +20,9 @@ const slides = [
   },
   {
     id: 2,
-    img: "./images/slide2.webp",
-    fallbackImg: "./images/slide2.jpg",
-    rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/kate-glotova-ZkZkWq8cxHo-unsplash.jpg",
+    img: "/images/slide2.jpg",
+    fallbackImg: "/images/slide2.webp",
+    rawUrl: `${GITHUB_RAW_BASE}/kate-glotova-ZkZkWq8cxHo-unsplash.jpg`,
     unsplashFallback: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=2000&q=80",
     titleKo: "엄격한 규격 관리 기반의 고순도 유효 성분",
     titleEn: "High-Purity Active Ingredients under Strict Standard Control",
@@ -31,20 +31,19 @@ const slides = [
   },
   {
     id: 3,
-    img: "./images/slide3.webp",
-    fallbackImg: "./images/slide3.jpg",
-    rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/maria-lupan-CD8_3hYj-Vc-unsplash.jpg",
+    img: "/images/slide3.jpg",
+    fallbackImg: "/images/slide3.webp",
+    rawUrl: `${GITHUB_RAW_BASE}/maria-lupan-CD8_3hYj-Vc-unsplash.jpg`,
     unsplashFallback: "https://images.unsplash.com/photo-1608248597260-22c60814fefd?auto=format&fit=crop&w=2000&q=80",
     titleKo: "혁신적인 처방과 맞춤형 원료 솔루션",
     titleEn: "Innovative Formulations & Customized Ingredient Solutions",
     descKo: "고객사의 아이디어를 실현하는 독자적이고 트렌디한 처방 솔루션과 최적화된 맞춤형 원료 매칭 가이드를 제공합니다.",
     descEn: "We provide trendy, unique formulation solutions and optimized custom ingredient matching guides to bring our clients' ideas to life."
-  },
-  {
+  },  {
     id: 4,
-    img: "./images/slide4.webp",
-    fallbackImg: "./images/slide4.jpg",
-    rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/chuttersnap-lQOkpEkMRfk-unsplash.jpg",
+    img: "/images/slide4.jpg",
+    fallbackImg: "/images/slide4.webp",
+    rawUrl: `${GITHUB_RAW_BASE}/chuttersnap-lQOkpEkMRfk-unsplash.jpg`,
     unsplashFallback: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=2000&q=80",
     titleKo: "지속 가능한 100% 비건 및 친환경 원료",
     titleEn: "Sustainable 100% Vegan & Eco-Friendly Raw Materials",
