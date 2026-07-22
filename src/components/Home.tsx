@@ -59,7 +59,7 @@ interface HomeProps {
 export default function Home({ onViewChange }: HomeProps) {
   const { t, language } = useLanguage();
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [hasChangedSlide, setHasChangedSlide] = useState(false);
+  const [prevIdx, setPrevIdx] = useState(0);
   
   const SLIDE_DURATION = 8000; // 8 seconds per slide transition as requested
 
@@ -76,8 +76,10 @@ export default function Home({ onViewChange }: HomeProps) {
   }, []);
 
   const handleNext = useCallback(() => {
-    setHasChangedSlide(true);
-    setCurrentIdx((prev) => (prev + 1) % slides.length);
+    setCurrentIdx((prev) => {
+      setPrevIdx(prev);
+      return (prev + 1) % slides.length;
+    });
   }, []);
 
   // Set up high-reliability slideshow autoplay
@@ -90,43 +92,41 @@ export default function Home({ onViewChange }: HomeProps) {
   }, [handleNext]);
 
   const selectSlide = (index: number) => {
-    setHasChangedSlide(true);
+    if (index === currentIdx) return;
+    setPrevIdx(currentIdx);
     setCurrentIdx(index);
   };
 
   const activeSlide = slides[currentIdx];
-  const firstSlideImgUrl = encodeURI(slides[0].img);
-  const firstSlideFallbackUrl = encodeURI(slides[0].fallbackImg);
 
   return (
     <div 
       className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden py-12 lg:py-0 bg-slate-900"
     >
-      {/* 1. Full-Bleed Background Slideshow with instant initial load & smooth hardware-accelerated zoom-out */}
-      <div 
-        className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url("${firstSlideImgUrl}"), url("${firstSlideFallbackUrl}")`,
-        }}
-      >
+      {/* 1. Full-Bleed Background Slideshow with instant initial load & seamless previous-slide layering */}
+      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-900">
         {slides.map((slide, index) => {
           const isActive = index === currentIdx;
-          const isInitialSlide = index === 0 && !hasChangedSlide;
+          const isPrev = index === prevIdx && currentIdx !== prevIdx;
           const slideImgUrl = encodeURI(slide.img);
 
           return (
             <div
               key={slide.id}
               className={`absolute inset-0 w-full h-full overflow-hidden ${
-                isActive ? "z-10 opacity-100" : "z-0 opacity-0 pointer-events-none"
+                isActive 
+                  ? "z-20 opacity-100" 
+                  : isPrev 
+                    ? "z-10 opacity-100 pointer-events-none" 
+                    : "z-0 opacity-0 pointer-events-none"
               }`}
               style={{
-                transition: isInitialSlide
-                  ? "none"
-                  : isActive 
-                    ? "opacity 1000ms ease-in-out, transform 8000ms cubic-bezier(0.25, 1, 0.5, 1)"
+                transition: isActive 
+                  ? "opacity 1000ms ease-in-out, transform 8000ms cubic-bezier(0.25, 1, 0.5, 1)"
+                  : isPrev
+                    ? "none"
                     : "opacity 1000ms ease-in-out, transform 0ms",
-                transform: isActive ? "scale(1.0) translateZ(0)" : "scale(1.08) translateZ(0)",
+                transform: isActive || isPrev ? "scale(1.0) translateZ(0)" : "scale(1.08) translateZ(0)",
                 willChange: "opacity, transform",
                 backfaceVisibility: "hidden",
               }}
