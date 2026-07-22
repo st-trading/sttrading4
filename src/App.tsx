@@ -90,7 +90,7 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 border-b border-slate-900 pb-12 mb-12">
             
             {/* Column 1: Brand & Desc */}
-            <div className="md:col-span-5 space-y-4">
+            <div className="md:col-span-4 space-y-4">
               <div className="flex items-center space-x-3 text-white cursor-pointer group/footer-logo" onClick={() => handleViewChange("home")}>
                 <div className="relative w-12 h-9 flex items-center justify-center shrink-0">
                   <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -130,7 +130,7 @@ export default function App() {
                   <span className="text-[9px] tracking-widest text-slate-500 uppercase mt-0.5">ST TRADING CO.</span>
                 </div>
               </div>
-              <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
+              <p className="text-xs text-slate-400 leading-relaxed max-w-xs">
                 {t(
                   "에스티트레이딩은 글로벌 화장품 제조사들과의 견고한 원자재 유통 총판 네트워크를 토대로 안전하고 검증된 고순도 기초 화학 원료 및 유효 진정 성분을 합리적인 단가에 공급합니다.",
                   "ST Trading provides high-purity chemical raw materials and proven cosmetic active ingredients at competitive prices, backed by our solid distribution partnerships with global cosmetic manufacturers."
@@ -139,26 +139,26 @@ export default function App() {
             </div>
 
             {/* Column 2: Legal Contacts */}
-            <div className="md:col-span-4 space-y-4 text-xs">
+            <div className="md:col-span-5 space-y-4 text-xs">
               <p className="text-white font-bold uppercase tracking-wider text-[10px]">
                 {t("연락처 정보", "CONTACT INFORMATION")}
               </p>
               <div className="space-y-2.5">
                 <div className="flex items-center space-x-2">
                   <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <span className="font-semibold text-slate-300">
+                  <span className="font-semibold text-slate-300 whitespace-nowrap">
                     {t("전화번호: 031-5196-6151", "Tel: +82-31-5196-6151")}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <span>
+                  <span className="whitespace-nowrap">
                     {t("이메일: sttrading@naver.com", "Email: sttrading@naver.com")}
                   </span>
                 </div>
                 <div className="flex items-start space-x-2">
                   <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" />
-                  <span className="leading-snug">
+                  <span className="leading-snug tracking-tight md:whitespace-nowrap lg:whitespace-nowrap">
                     {t(
                       "본사: 경기도 안양시 만안구 덕천로152번길 25, 안양ISBIZ타워 729A호",
                       "HQ: Rm 729A, Anyang ISBIZ Tower, 25 Deokcheon-ro 152beon-gil, Manan-gu, Anyang-si, Gyeonggi-do, Republic of Korea"
@@ -167,7 +167,7 @@ export default function App() {
                 </div>
                 <div className="flex items-start space-x-2">
                   <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" />
-                  <span className="leading-snug">
+                  <span className="leading-snug tracking-tight md:whitespace-nowrap lg:whitespace-nowrap">
                     {t(
                       "공장: 경기도 안양시 만안구 덕천로152번길 25, 안양ISBIZ타워 B148호",
                       "Factory: Rm B148, Anyang ISBIZ Tower, 25 Deokcheon-ro 152beon-gil, Manan-gu, Anyang-si, Gyeonggi-do, Republic of Korea"
