@@ -3,13 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Award, FileText, Compass } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
-// Define main slides using optimized local webp assets with multi-tier fallbacks (local JPG -> GitHub Raw CDN -> Unsplash CDN)
+// Define main slides using optimized local assets with multi-tier fallbacks for instant 0-lag rendering
+const FIRST_SLIDE_IMAGE = "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/%EC%B2%AB%EC%A7%B8.jpg";
+
 const slides = [
   {
     id: 1,
-    img: "./images/slide1.webp",
+    img: FIRST_SLIDE_IMAGE,
     fallbackImg: "./images/slide1.jpg",
-    rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/ayush-kumar-On85vnEHpjU-unsplash.jpg",
+    rawUrl: FIRST_SLIDE_IMAGE,
     unsplashFallback: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=2000&q=80",
     titleKo: "최상위 화장품 원료 파트너,\n에스티트레이딩",
     titleEn: "Top-Tier Cosmetics Ingredients Partner, ST Trading",
@@ -100,7 +102,12 @@ export default function Home({ onViewChange }: HomeProps) {
       className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden py-12 lg:py-0"
     >
       {/* 1. Full-Bleed Background Slideshow with instant initial load & smooth hardware-accelerated zoom-out */}
-      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-900">
+      <div 
+        className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-900 bg-cover bg-center"
+        style={{
+          backgroundImage: `url("${slides[0].img}"), url("${slides[0].fallbackImg}")`,
+        }}
+      >
         {slides.map((slide, index) => {
           const isActive = index === currentIdx;
           const isInitialSlide = index === 0 && !hasChangedSlide;
