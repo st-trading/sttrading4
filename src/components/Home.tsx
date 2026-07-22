@@ -67,7 +67,9 @@ export default function Home({ onViewChange }: HomeProps) {
       const img1 = new Image();
       img1.src = slide.img;
       const img2 = new Image();
-      img2.src = slide.rawUrl;
+      img2.src = slide.fallbackImg;
+      const img3 = new Image();
+      img3.src = slide.rawUrl;
     });
   }, []);
 
@@ -94,25 +96,24 @@ export default function Home({ onViewChange }: HomeProps) {
     <div 
       className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden py-12 lg:py-0"
     >
-      {/* 1. Full-Bleed Background Slideshow with zoom-out image effect & dark overlay */}
+      {/* 1. Full-Bleed Background Slideshow with hardware-accelerated zoom-out image effect & dark overlay */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950">
         {slides.map((slide, index) => {
           const isActive = index === currentIdx;
           return (
-            <motion.div
+            <div
               key={slide.id}
-              initial={{ opacity: 0, scale: 1.12 }}
-              animate={{
-                opacity: isActive ? 1 : 0,
-                scale: isActive ? 1.0 : 1.12,
-              }}
-              transition={{
-                opacity: { duration: 1.0, ease: "easeInOut" },
-                scale: { duration: 8.0, ease: "linear" },
-              }}
-              className={`absolute inset-0 w-full h-full will-change-transform ${
-                isActive ? "z-10" : "z-0 pointer-events-none"
+              className={`absolute inset-0 w-full h-full overflow-hidden ${
+                isActive ? "z-10 opacity-100" : "z-0 opacity-0 pointer-events-none"
               }`}
+              style={{
+                transition: isActive 
+                  ? "opacity 1000ms ease-in-out, transform 8000ms cubic-bezier(0.25, 1, 0.5, 1)"
+                  : "opacity 1000ms ease-in-out, transform 0ms",
+                transform: isActive ? "scale(1.0) translateZ(0)" : "scale(1.08) translateZ(0)",
+                willChange: "opacity, transform",
+                backfaceVisibility: "hidden",
+              }}
             >
               <img
                 src={slide.img}
@@ -120,6 +121,10 @@ export default function Home({ onViewChange }: HomeProps) {
                 className="w-full h-full object-cover object-center lg:object-right"
                 loading="eager"
                 decoding="async"
+                style={{
+                  transform: "translateZ(0)",
+                  backfaceVisibility: "hidden",
+                }}
                 onError={(e) => {
                   const target = e.currentTarget;
                   const currentSrc = target.src;
@@ -140,7 +145,7 @@ export default function Home({ onViewChange }: HomeProps) {
               />
               {/* Soft dark gradient overlay for crisp white text legibility */}
               <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/55 pointer-events-none" />
-            </motion.div>
+            </div>
           );
         })}
       </div>
