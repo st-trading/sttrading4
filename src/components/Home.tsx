@@ -3,13 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Award, FileText, Compass } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
-// Define main slides using optimized local webp assets with remote fallbacks for instant 0-lag rendering
+// Define main slides using optimized local webp assets with multi-tier fallbacks (local JPG -> GitHub Raw CDN -> Unsplash CDN)
 const slides = [
   {
     id: 1,
-    img: "/images/slide1.webp",
-    fallbackImg: "/images/slide1_opt.jpg",
+    img: "./images/slide1.webp",
+    fallbackImg: "./images/slide1.jpg",
     rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/ayush-kumar-On85vnEHpjU-unsplash.jpg",
+    unsplashFallback: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=2000&q=80",
     titleKo: "최상위 화장품 원료 파트너, 에스티트레이딩",
     titleEn: "Top-Tier Cosmetics Ingredients Partner, ST Trading",
     descKo: "글로벌 총판 네트워크와 철저한 ISO 검증 시스템을 바탕으로 고순도 색소, 염료, 유효 진정 활성 성분을 유통합니다.",
@@ -17,9 +18,10 @@ const slides = [
   },
   {
     id: 2,
-    img: "/images/slide2.webp",
-    fallbackImg: "/images/slide2_opt.jpg",
+    img: "./images/slide2.webp",
+    fallbackImg: "./images/slide2.jpg",
     rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/kate-glotova-ZkZkWq8cxHo-unsplash.jpg",
+    unsplashFallback: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=2000&q=80",
     titleKo: "엄격한 규격 관리 기반의 고순도 유효 성분",
     titleEn: "High-Purity Active Ingredients under Strict Standard Control",
     descKo: "엄격한 정밀 규격 분석을 통해 원료의 안전성과 생리 활성 효능을 극대화하여 신뢰성 높은 성분을 유통합니다.",
@@ -27,9 +29,10 @@ const slides = [
   },
   {
     id: 3,
-    img: "/images/slide3.webp",
-    fallbackImg: "/images/slide3_opt.jpg",
+    img: "./images/slide3.webp",
+    fallbackImg: "./images/slide3.jpg",
     rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/maria-lupan-CD8_3hYj-Vc-unsplash.jpg",
+    unsplashFallback: "https://images.unsplash.com/photo-1608248597260-22c60814fefd?auto=format&fit=crop&w=2000&q=80",
     titleKo: "혁신적인 처방과 맞춤형 원료 솔루션",
     titleEn: "Innovative Formulations & Customized Ingredient Solutions",
     descKo: "고객사의 아이디어를 실현하는 독자적이고 트렌디한 처방 솔루션과 최적화된 맞춤형 원료 매칭 가이드를 제공합니다.",
@@ -37,9 +40,10 @@ const slides = [
   },
   {
     id: 4,
-    img: "/images/slide4.webp",
-    fallbackImg: "/images/slide4_opt.jpg",
+    img: "./images/slide4.webp",
+    fallbackImg: "./images/slide4.jpg",
     rawUrl: "https://raw.githubusercontent.com/st-trading/sttrading4/main/public/images/chuttersnap-lQOkpEkMRfk-unsplash.jpg",
+    unsplashFallback: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=2000&q=80",
     titleKo: "지속 가능한 100% 비건 및 친환경 원료",
     titleEn: "Sustainable 100% Vegan & Eco-Friendly Raw Materials",
     descKo: "환경을 생각하는 식물성 비건 인증 원료 성분으로 클린뷰티의 미래를 선도합니다.",
@@ -57,11 +61,13 @@ export default function Home({ onViewChange }: HomeProps) {
   
   const SLIDE_DURATION = 8000; // 8 seconds per slide transition as requested
 
-  // Preload all slide images immediately on mount so transitions are instant without lag or top-down rendering
+  // Preload all slide images immediately on mount so transitions are instant without lag
   useEffect(() => {
     slides.forEach((slide) => {
-      const img = new Image();
-      img.src = slide.img;
+      const img1 = new Image();
+      img1.src = slide.img;
+      const img2 = new Image();
+      img2.src = slide.rawUrl;
     });
   }, []);
 
@@ -115,11 +121,20 @@ export default function Home({ onViewChange }: HomeProps) {
                 loading="eager"
                 decoding="async"
                 onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  if (target.src !== slide.fallbackImg) {
+                  const target = e.currentTarget;
+                  const currentSrc = target.src;
+                  
+                  // 1. Try local JPG if local webp fails
+                  if (currentSrc.endsWith(".webp")) {
                     target.src = slide.fallbackImg;
-                  } else if (target.src !== slide.rawUrl) {
+                  }
+                  // 2. Try raw GitHub CDN URL if local relative path fails
+                  else if (!currentSrc.includes("raw.githubusercontent.com") && !currentSrc.includes("unsplash.com")) {
                     target.src = slide.rawUrl;
+                  }
+                  // 3. Fallback to Unsplash CDN if GitHub raw CDN fails
+                  else if (!currentSrc.includes("unsplash.com")) {
+                    target.src = slide.unsplashFallback;
                   }
                 }}
               />
