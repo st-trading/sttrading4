@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { Search, MessageSquare, Compass, Info, X, ChevronRight, Check, Sparkles, Building2 } from "lucide-react";
+import React, { useState, useMemo, useEffect } from "react";
+import { Search, MessageSquare, Compass, ArrowLeft, Printer, Check, Sparkles, Building2, FileText, Share2, Info, ChevronRight } from "lucide-react";
 import { PRODUCTS } from "../data/products";
 import { Product, ProductCategory } from "../types";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -18,8 +18,21 @@ export default function ProductSection({
   onViewChange
 }: ProductSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedProductForModal, setSelectedProductForModal] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [copied, setCopied] = useState(false);
   const { language, t } = useLanguage();
+
+  // Scroll to top when product is selected
+  useEffect(() => {
+    if (selectedProduct) {
+      const element = document.getElementById("product");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  }, [selectedProduct]);
 
   const categories: { id: ProductCategory | "all"; labelKo: string; labelEn: string; descKo: string; descEn: string }[] = [
     {
@@ -89,7 +102,7 @@ export default function ProductSection({
   }, [searchQuery, selectedCategory]);
 
   const handleInquiryRequest = (productName: string) => {
-    setSelectedProductForModal(null);
+    setSelectedProduct(null);
     onSelectProduct(productName);
     if (onViewChange) {
       onViewChange("inquiry");
@@ -112,14 +125,234 @@ export default function ProductSection({
 
   const getCategoryLabel = (cat: ProductCategory) => {
     switch (cat) {
-      case "dye": return t("염료", "Dye");
-      case "color": return t("색소", "Color");
-      case "humectant": return t("보습제", "Humectant");
-      case "active": return t("기능성원료", "Active");
+      case "dye": return t("염료 (DYE)", "Dye");
+      case "color": return t("색소 (COLOR)", "Color");
+      case "humectant": return t("보습제 (HUMECTANT)", "Humectant");
+      case "active": return t("기능성원료 (ACTIVE)", "Active");
       default: return "";
     }
   };
 
+  const handleCopyLink = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  // IF a product is selected, render the dedicated "Full-Page Technical Specification Sheet Window/View"
+  if (selectedProduct) {
+    return (
+      <section id="product" className="py-12 bg-slate-100 text-slate-900 min-h-screen scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          {/* Top Bar Navigation */}
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6 print:hidden">
+            <button
+              onClick={() => setSelectedProduct(null)}
+              className="inline-flex items-center space-x-2 px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-indigo-900 transition-all shadow-sm cursor-pointer group"
+            >
+              <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:-translate-x-1 transition-transform" />
+              <span>{t("← 전체 취급 원료 목록으로 돌아가기", "← Back to Ingredients Catalog")}</span>
+            </button>
+
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={handleCopyLink}
+                className="inline-flex items-center space-x-1.5 px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 cursor-pointer transition-colors"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
+                <span>{copied ? t("복소완료", "Copied") : t("공유하기", "Share")}</span>
+              </button>
+              <button
+                onClick={handlePrint}
+                className="inline-flex items-center space-x-1.5 px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 cursor-pointer transition-colors"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>{t("사양서 인쇄", "Print Specs")}</span>
+              </button>
+              <button
+                onClick={() => handleInquiryRequest(`${selectedProduct.name} (${selectedProduct.englishName})`)}
+                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-indigo-900 hover:bg-indigo-800 text-white rounded-lg text-xs font-extrabold cursor-pointer transition-colors shadow-sm"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>{t("견적 및 샘플 문의", "Inquire & Sample")}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Main Printable Specification Card Document */}
+          <div className="bg-white rounded-2xl border border-slate-200/90 shadow-lg overflow-hidden border-t-8 border-t-indigo-950">
+            
+            {/* Header Document Banner */}
+            <div className="bg-slate-900 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className="px-3 py-1 bg-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-widest rounded-md">
+                    TECHNICAL DATA SHEET
+                  </span>
+                  <span className="text-xs text-slate-300 font-semibold">
+                    {getCategoryLabel(selectedProduct.category)}
+                  </span>
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+                  {selectedProduct.name}
+                </h1>
+                <p className="text-sm font-mono text-indigo-300 mt-1">
+                  INCI Name: {selectedProduct.englishName}
+                </p>
+              </div>
+
+              <div className="text-left sm:text-right border-t sm:border-t-0 border-slate-800 pt-3 sm:pt-0 w-full sm:w-auto">
+                <p className="text-xs font-bold text-slate-200">에스티트레이딩 (ST TRADING)</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">화장품 원료 전문 유통 공급사</p>
+                <p className="text-[10px] font-mono text-indigo-400 mt-1">STT-SPEC-{selectedProduct.id.toUpperCase()}</p>
+              </div>
+            </div>
+
+            {/* Content Specifications Body */}
+            <div className="p-6 sm:p-10 space-y-8">
+              
+              {/* Table Specs Sheet */}
+              <div>
+                <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2 border-b border-slate-200 pb-2">
+                  <FileText className="w-4 h-4 text-indigo-900" />
+                  <span>{t("원료 기본 사양 및 공급 정보", "Basic Specifications & Supply Information")}</span>
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-200 rounded-xl overflow-hidden border border-slate-200 shadow-sm text-xs">
+                  
+                  <div className="bg-slate-50 p-4">
+                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                      PRODUCT NAME (제품명)
+                    </span>
+                    <span className="font-extrabold text-slate-900 text-sm">{selectedProduct.name}</span>
+                  </div>
+
+                  <div className="bg-slate-50 p-4">
+                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                      INCI NAME (표성분명)
+                    </span>
+                    <span className="font-bold text-slate-800">{selectedProduct.englishName}</span>
+                  </div>
+
+                  <div className="bg-white p-4">
+                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                      MANUFACTURER (제조사 / 원산지)
+                    </span>
+                    <div className="flex items-center space-x-1.5 font-bold text-indigo-950">
+                      <Building2 className="w-3.5 h-3.5 text-indigo-700" />
+                      <span>{t("중국 (China)", "China")}</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-4">
+                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                      CAS NUMBER
+                    </span>
+                    <span className="font-mono font-bold text-slate-900 select-all">
+                      {selectedProduct.casNumber || "N/A"}
+                    </span>
+                  </div>
+
+                  <div className="bg-slate-50 p-4">
+                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                      PACKING (포장 단위)
+                    </span>
+                    <span className="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-block">
+                      {selectedProduct.packing || "25KG"}
+                    </span>
+                  </div>
+
+                  <div className="bg-slate-50 p-4">
+                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                      SPECIFICATION (순도 및 등급)
+                    </span>
+                    <span className="font-bold text-slate-800">
+                      {selectedProduct.specification || "Cosmetic Grade (순도 ≥ 99.0%)"}
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+
+              {/* Recommended Applications */}
+              <div>
+                <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2 border-b border-slate-200 pb-2">
+                  <Sparkles className="w-4 h-4 text-indigo-900" />
+                  <span>{t("추천 적용 제형 (Applications)", "Recommended Applications")}</span>
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProduct.applications.map((app, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3.5 py-1.5 rounded-lg bg-indigo-50 text-indigo-900 font-bold text-xs border border-indigo-200 shadow-2xs"
+                    >
+                      {translateApp(app)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Functional Description */}
+              <div>
+                <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2 border-b border-slate-200 pb-2">
+                  <Info className="w-4 h-4 text-indigo-900" />
+                  <span>{t("원료 주요 특징 및 효능 설명", "Key Features & Description")}</span>
+                </h2>
+                <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 text-slate-700 text-xs sm:text-sm leading-relaxed font-sans">
+                  {selectedProduct.description}
+                </div>
+              </div>
+
+              {/* Sourcing & Inquiry Callout */}
+              <div className="bg-indigo-950 text-white rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                  <h3 className="font-bold text-sm text-white">{t("해당 원료의 샘플 또는 견적서가 필요하신가요?", "Need a sample or price quote for this raw material?")}</h3>
+                  <p className="text-xs text-indigo-200 mt-1">
+                    {t("에스티트레이딩 영업팀에 원하시는 수량 및 문의 내용을 작성해주시면 신속하게 지원해 드립니다.", "Contact ST Trading sales team for immediate price quote and sample delivery.")}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleInquiryRequest(`${selectedProduct.name} (${selectedProduct.englishName})`)}
+                  className="px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs rounded-lg shrink-0 cursor-pointer transition-colors shadow-sm"
+                >
+                  {t("이 원료 견적/샘플 신청하기", "Request Quote & Sample")}
+                </button>
+              </div>
+
+            </div>
+
+            {/* Document Footer */}
+            <div className="bg-slate-100 px-6 py-4 border-t border-slate-200 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500 font-medium">
+              <span>© ST TRADING. All Rights Reserved. 안양ISBIZ타워 729A호 / B148호</span>
+              <span>TEL: 031-5196-6151 | EMAIL: sttrading@naver.com</span>
+            </div>
+
+          </div>
+
+          {/* Bottom Back Button */}
+          <div className="mt-8 text-center print:hidden">
+            <button
+              onClick={() => setSelectedProduct(null)}
+              className="inline-flex items-center space-x-2 px-6 py-3 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-800 hover:bg-slate-50 transition-all shadow-sm cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4 text-slate-500" />
+              <span>{t("전체 취급 원료 목록으로 돌아가기", "Back to Ingredients List")}</span>
+            </button>
+          </div>
+
+        </div>
+      </section>
+    );
+  }
+
+  // DEFAULT VIEW: Catalog Table
   return (
     <section id="product" className="py-20 bg-slate-50 text-slate-900 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -135,8 +368,8 @@ export default function ProductSection({
           <div className="h-1.5 w-16 bg-indigo-900 mx-auto mt-4 rounded-full" />
           <p className="text-slate-500 text-sm mt-3">
             {t(
-              "원하시는 원료명을 클릭하시면 CAS No., 규격, 포장 단위 및 상세 기능 정보를 확인하실 수 있습니다.",
-              "Click any raw material row to view CAS No., specification, packaging, and application details."
+              "원하시는 원료명을 클릭하시면 CAS No., 규격, 포장 단위 및 상세 기능 사양서 화면이 열립니다.",
+              "Click any raw material row to open its full Technical Specification Sheet."
             )}
           </p>
         </div>
@@ -207,7 +440,7 @@ export default function ProductSection({
                   {filteredProducts.map((p) => (
                     <tr
                       key={p.id}
-                      onClick={() => setSelectedProductForModal(p)}
+                      onClick={() => setSelectedProduct(p)}
                       className="hover:bg-indigo-50/50 transition-colors cursor-pointer group"
                     >
                       {/* Product Name */}
@@ -250,7 +483,7 @@ export default function ProductSection({
                         </div>
                       </td>
 
-                      {/* Manufacturer: Changed all to 중국 as requested */}
+                      {/* Manufacturer: 중국 */}
                       <td className="py-4 px-4 sm:px-6 align-middle">
                         <div className="flex items-center justify-between">
                           <span className="font-semibold text-slate-800 text-xs">
@@ -314,149 +547,6 @@ export default function ProductSection({
         </div>
 
       </div>
-
-      {/* Product Detail Modal */}
-      {selectedProductForModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-          <div 
-            className="bg-white rounded-2xl max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="bg-indigo-900 text-white px-6 py-4 flex items-center justify-between border-b border-indigo-800 shrink-0">
-              <div className="flex items-center space-x-2">
-                <span className="px-2.5 py-0.5 rounded bg-indigo-800 text-amber-300 text-[10px] font-bold uppercase">
-                  {getCategoryLabel(selectedProductForModal.category)}
-                </span>
-                <span className="text-xs text-indigo-200 font-medium">원료 상세 사양서</span>
-              </div>
-              <button
-                onClick={() => setSelectedProductForModal(null)}
-                className="text-indigo-200 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-6 overflow-y-auto space-y-6">
-              {/* Product Title */}
-              <div>
-                <h3 className="text-2xl font-black text-slate-900 leading-tight">
-                  {selectedProductForModal.name}
-                </h3>
-                <p className="text-sm font-mono font-medium text-indigo-600 mt-1 select-all">
-                  INCI / English: {selectedProductForModal.englishName}
-                </p>
-              </div>
-
-              {/* Data Grid Table */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
-                <div>
-                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
-                    PRODUCT NAME (제품명)
-                  </span>
-                  <span className="font-bold text-slate-800">{selectedProductForModal.name}</span>
-                </div>
-
-                <div>
-                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
-                    INCI NAME (성분명)
-                  </span>
-                  <span className="font-semibold text-slate-800">{selectedProductForModal.englishName}</span>
-                </div>
-
-                <div>
-                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
-                    MANUFACTURER (제조사/제조국)
-                  </span>
-                  <span className="font-bold text-indigo-900 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100 inline-block">
-                    {t("중국 (China)", "China")}
-                  </span>
-                </div>
-
-                <div>
-                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
-                    CAS NUMBER
-                  </span>
-                  <span className="font-mono font-bold text-slate-800 select-all">
-                    {selectedProductForModal.casNumber || "N/A"}
-                  </span>
-                </div>
-
-                <div>
-                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
-                    PACKING (포장 단위)
-                  </span>
-                  <span className="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 inline-block">
-                    {selectedProductForModal.packing || "25KG"}
-                  </span>
-                </div>
-
-                <div>
-                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
-                    SPECIFICATION (순도/규격)
-                  </span>
-                  <span className="font-semibold text-slate-800">
-                    {selectedProductForModal.specification || "Cosmetic Grade (순도 ≥ 99.0%)"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Recommended Applications */}
-              <div>
-                <span className="text-slate-500 font-bold text-xs block mb-2 uppercase tracking-wider">
-                  RECOMMENDED APPLICATION (추천 적용 제형)
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {selectedProductForModal.applications.map((app, idx) => (
-                    <span
-                      key={idx}
-                      className="text-xs font-bold px-3 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100"
-                    >
-                      {translateApp(app)}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <span className="text-slate-500 font-bold text-xs block mb-2 uppercase tracking-wider">
-                  DESCRIPTION & FEATURES (원료 특성 및 설명)
-                </span>
-                <p className="text-slate-700 text-xs leading-relaxed bg-white p-4 rounded-xl border border-slate-200">
-                  {selectedProductForModal.description}
-                </p>
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="bg-slate-50 px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
-              <span className="text-xs text-slate-500 font-medium hidden sm:inline">
-                {t("샘플 신청 및 MOQ 단가 문의 가능합니다.", "Sample requests and MOQ price quotes available.")}
-              </span>
-              <div className="flex items-center space-x-3 w-full sm:w-auto">
-                <button
-                  onClick={() => setSelectedProductForModal(null)}
-                  className="w-1/2 sm:w-auto px-4 py-2.5 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
-                >
-                  {t("닫기", "Close")}
-                </button>
-                <button
-                  onClick={() => handleInquiryRequest(`${selectedProductForModal.name} (${selectedProductForModal.englishName})`)}
-                  className="w-1/2 sm:w-auto px-5 py-2.5 bg-indigo-900 hover:bg-indigo-800 text-white text-xs font-bold rounded-xl transition-colors shadow-md flex items-center justify-center space-x-1.5 cursor-pointer"
-                >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  <span>{t("이 원료 견적 문의하기", "Get Quote for This")}</span>
-                </button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      )}
-
     </section>
   );
 }
