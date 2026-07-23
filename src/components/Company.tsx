@@ -108,8 +108,8 @@ export default function Company({ activeTab = "greeting", onSubViewChange }: Com
                 {/* Upper row: Warehouse Photo (Left) & CEO Paragraphs (Right) aligned top-to-bottom */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
                   {/* Left: Warehouse Photo matching paragraph block height */}
-                  <div className="lg:col-span-5 flex flex-col">
-                    <div className="w-full h-full min-h-[300px] rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-white">
+                  <div className="lg:col-span-5 flex flex-col h-full">
+                    <div className="w-full h-full rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-white flex">
                       <img 
                         src="/images/창고사진.jpg" 
                         loading="eager"
@@ -124,7 +124,7 @@ export default function Company({ activeTab = "greeting", onSubViewChange }: Com
                   </div>
 
                   {/* Right: CEO Message Content (Paragraphs 1 ~ 5) */}
-                  <div className="lg:col-span-7 flex flex-col justify-between space-y-4 sm:space-y-5 text-slate-600 text-sm sm:text-[15px] leading-relaxed">
+                  <div className="lg:col-span-7 flex flex-col justify-start space-y-2 sm:space-y-2.5 text-slate-600 text-sm sm:text-[15px] leading-relaxed">
                     {currentCEOMessage.content.map((para, index) => (
                       <p key={index} className="break-keep">{para}</p>
                     ))}
