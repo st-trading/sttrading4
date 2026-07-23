@@ -77,18 +77,18 @@ export default function Company({ activeTab = "greeting", onSubViewChange }: Com
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.25 }}
-              className="bg-slate-50 rounded-3xl p-8 sm:p-12 lg:p-16 border border-slate-100 shadow-sm"
+              className="bg-slate-50/80 rounded-3xl p-6 sm:p-10 lg:p-12 border border-slate-200/60 shadow-xs"
             >
               <div className="space-y-8">
                 {/* Header Row: Title & Subtitle Aligned */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start pb-6 border-b border-slate-200/60">
                   {/* Left Title + Icon on Left */}
-                  <div className="lg:col-span-5 flex items-start space-x-4">
-                    <div className="p-3.5 rounded-2xl bg-indigo-100 text-indigo-600 shrink-0 mt-0.5 shadow-xs">
+                  <div className="lg:col-span-7 flex items-start space-x-4">
+                    <div className="p-3.5 rounded-2xl bg-indigo-100 text-indigo-600 shrink-0 mt-1 shadow-xs">
                       <Award className="w-8 h-8" />
                     </div>
                     <div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight leading-snug whitespace-pre-line">
+                      <h3 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight leading-snug whitespace-pre-line break-keep">
                         {currentCEOMessage.title}
                       </h3>
                       <p className="text-xs font-bold text-indigo-600 tracking-wider uppercase mt-2">
@@ -98,43 +98,44 @@ export default function Company({ activeTab = "greeting", onSubViewChange }: Com
                   </div>
 
                   {/* Right Subtitle */}
-                  <div className="lg:col-span-7 pt-1">
-                    <p className="text-base text-indigo-900/90 font-semibold leading-relaxed whitespace-pre-line border-l-4 border-indigo-500 pl-4 py-1">
+                  <div className="lg:col-span-5 pt-1">
+                    <p className="text-sm sm:text-base text-indigo-900/90 font-semibold leading-relaxed whitespace-pre-line break-keep border-l-4 border-indigo-500 pl-4 py-1">
                       {currentCEOMessage.subtitle}
                     </p>
                   </div>
                 </div>
 
-                {/* Content Row: Warehouse Photo aligned with CEO Content */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start border-t border-slate-200/60 pt-6">
-                  {/* Left: Clean Warehouse Photo (Top aligned with Paragraph 1, Bottom ends above signature) */}
-                  <div className="lg:col-span-5 h-full flex flex-col justify-start">
-                    <div className="w-full rounded-2xl overflow-hidden border border-slate-200/90 shadow-md bg-white group">
+                {/* Upper row: Warehouse Photo (Left) & CEO Paragraphs (Right) aligned top-to-bottom */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+                  {/* Left: Warehouse Photo matching paragraph block height */}
+                  <div className="lg:col-span-5 flex flex-col">
+                    <div className="w-full h-full min-h-[300px] rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-white">
                       <img 
                         src="/images/창고사진.jpg" 
+                        loading="eager"
+                        decoding="async"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = "/images/warehouse.jpg";
                         }}
                         alt="에스티트레이딩 원료 물류 보관 창고" 
-                        className="w-full h-auto max-h-[380px] object-cover group-hover:scale-102 transition-transform duration-500"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
 
-                  {/* Right: CEO Message Paragraphs + Signature */}
-                  <div className="lg:col-span-7 flex flex-col space-y-6">
-                    <div className="space-y-4 text-slate-600 text-sm leading-relaxed">
-                      {currentCEOMessage.content.map((para, index) => (
-                        <p key={index}>{para}</p>
-                      ))}
-                    </div>
+                  {/* Right: CEO Message Content (Paragraphs 1 ~ 5) */}
+                  <div className="lg:col-span-7 flex flex-col justify-between space-y-4 sm:space-y-5 text-slate-600 text-sm sm:text-[15px] leading-relaxed">
+                    {currentCEOMessage.content.map((para, index) => (
+                      <p key={index} className="break-keep">{para}</p>
+                    ))}
+                  </div>
+                </div>
 
-                    <div className="pt-5 border-t border-slate-200/80 flex justify-end">
-                      <div className="text-right">
-                        <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">ST TRADING CO., LTD.</p>
-                        <p className="text-sm font-bold text-slate-800 mt-1">{currentCEOMessage.signature}</p>
-                      </div>
-                    </div>
+                {/* Bottom row: Signature placed below the photo & text block on the right */}
+                <div className="pt-4 border-t border-slate-200/60 flex justify-end text-right">
+                  <div>
+                    <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">ST TRADING CO., LTD.</p>
+                    <p className="text-base sm:text-lg font-bold text-slate-800 mt-1">{currentCEOMessage.signature}</p>
                   </div>
                 </div>
               </div>
