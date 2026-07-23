@@ -105,11 +105,11 @@ export default function Company({ activeTab = "greeting", onSubViewChange }: Com
                   </div>
                 </div>
 
-                {/* Upper row: Warehouse Photo (Left) & CEO Paragraphs (Right) aligned top-to-bottom */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
-                  {/* Left: Warehouse Photo matching paragraph block height */}
-                  <div className="lg:col-span-5 flex flex-col h-full">
-                    <div className="w-full h-full rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-white flex">
+                {/* Upper row: Warehouse Photo (Left) & CEO Paragraphs (Right) */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+                  {/* Left: Warehouse Photo with balanced height */}
+                  <div className="lg:col-span-5 flex flex-col">
+                    <div className="w-full h-[320px] sm:h-[350px] rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-white">
                       <img 
                         src="/images/창고사진.jpg" 
                         loading="eager"
