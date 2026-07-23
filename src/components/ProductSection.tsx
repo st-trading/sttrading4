@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { motion } from "framer-motion";
-import { Search, Filter, MessageSquare, Compass, Info, Check, Sparkles } from "lucide-react";
+import { Search, MessageSquare, Compass, Info, X, ChevronRight, Check, Sparkles, Building2 } from "lucide-react";
 import { PRODUCTS } from "../data/products";
 import { Product, ProductCategory } from "../types";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -19,14 +18,45 @@ export default function ProductSection({
   onViewChange
 }: ProductSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedProductForModal, setSelectedProductForModal] = useState<Product | null>(null);
   const { language, t } = useLanguage();
 
-  const categories: { id: ProductCategory | "all"; label: string; desc: string }[] = [
-    { id: "all", label: t("전체보기", "All Raw Materials"), desc: t("에스티트레이딩의 모든 고품질 원료", "All high-quality cosmetic raw materials distributed by ST Trading") },
-    { id: "dye", label: t("염료 / DYE", "Dyes (DYE)"), desc: t("선명하고 수용성이 뛰어난 화장품용 산성 염료", "Vibrant, highly water-soluble acid dyes for cosmetics") },
-    { id: "color", label: t("색소 / COLOR", "Colorants (COLOR)"), desc: t("스킨 베이스 조정을 위한 고안정성 철산화물 무기 안료", "High-stability inorganic pigments and iron oxides for skin base makeup") },
-    { id: "humectant", label: t("보습제 / HUMECTANT", "Humectants (HUMECTANT)"), desc: t("피부 수분 유지력을 극대화하는 바이오 보습 성분", "Bio-active moisturizing ingredients maximizing skin water retention") },
-    { id: "active", label: t("ACTIVE (기능성)", "Active Ingredients"), desc: t("미백, 주름개선 식약처 고시 검증 유효 원료", "Certified active cosmetic ingredients for whitening, anti-wrinkle, and soothing") }
+  const categories: { id: ProductCategory | "all"; labelKo: string; labelEn: string; descKo: string; descEn: string }[] = [
+    {
+      id: "all",
+      labelKo: "전체보기",
+      labelEn: "ALL PRODUCTS",
+      descKo: "에스티트레이딩의 모든 고품질 화장품 원료 라인업",
+      descEn: "All high-quality cosmetic raw materials supplied by ST Trading"
+    },
+    {
+      id: "dye",
+      labelKo: "염료 (DYE)",
+      labelEn: "DYES",
+      descKo: "선명한 발색과 지속력이 뛰어난 화장품용 산화 및 직접 염료",
+      descEn: "Oxidation & direct dyes for cosmetics with vivid color and longevity"
+    },
+    {
+      id: "color",
+      labelKo: "색소 (COLOR)",
+      labelEn: "COLORANTS",
+      descKo: "안정성이 뛰어난 타르 색소 및 조색 안료",
+      descEn: "High-stability tar colorants and tone-adjusting pigments"
+    },
+    {
+      id: "humectant",
+      labelKo: "보습제 (HUMECTANT)",
+      labelEn: "HUMECTANTS",
+      descKo: "피부 및 모발 수분 유지를 돕는 바이오 보습 성분",
+      descEn: "Bio-active moisturizing ingredients maximizing moisture retention"
+    },
+    {
+      id: "active",
+      labelKo: "기능성 원료 (ACTIVE)",
+      labelEn: "ACTIVE INGREDIENTS",
+      descKo: "주름개선, 항산화, 진정 등 검증된 유효 기능성 성분",
+      descEn: "Proven active ingredients for anti-aging, antioxidants & soothing"
+    }
   ];
 
   const translateApp = (app: string) => {
@@ -37,6 +67,9 @@ export default function ProductSection({
       case "헤어케어": return t("헤어케어", "Hair Care");
       case "두피케어": return t("두피케어", "Scalp Care");
       case "제품안정화": return t("제품안정화", "Stabilization");
+      case "COLORANTS": return t("색조 및 헤어 조색", "Colorants & Hair Dye");
+      case "안티에이징": return t("안티에이징", "Anti-Aging");
+      case "펌제": return t("펌제", "Perm Formula");
       default: return app;
     }
   };
@@ -50,12 +83,13 @@ export default function ProductSection({
         p.name.toLowerCase().includes(cleanQuery) ||
         p.englishName.toLowerCase().includes(cleanQuery) ||
         p.description.toLowerCase().includes(cleanQuery) ||
-        p.origin.toLowerCase().includes(cleanQuery);
+        (p.casNumber && p.casNumber.includes(cleanQuery));
       return matchesCategory && matchesSearch;
     });
   }, [searchQuery, selectedCategory]);
 
   const handleInquiryRequest = (productName: string) => {
+    setSelectedProductForModal(null);
     onSelectProduct(productName);
     if (onViewChange) {
       onViewChange("inquiry");
@@ -76,29 +110,39 @@ export default function ProductSection({
     }
   };
 
+  const getCategoryLabel = (cat: ProductCategory) => {
+    switch (cat) {
+      case "dye": return t("염료", "Dye");
+      case "color": return t("색소", "Color");
+      case "humectant": return t("보습제", "Humectant");
+      case "active": return t("기능성원료", "Active");
+      default: return "";
+    }
+  };
+
   return (
-    <section id="product" className="py-24 bg-slate-50 text-slate-900 scroll-mt-20">
+    <section id="product" className="py-20 bg-slate-50 text-slate-900 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-bold tracking-widest text-indigo-600 uppercase bg-indigo-50 px-3.5 py-1.5 rounded-full">
+        {/* Section Title */}
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <span className="text-xs font-bold tracking-widest text-indigo-600 uppercase bg-indigo-50 px-3.5 py-1.5 rounded-full border border-indigo-100">
             OUR PRODUCTS
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-4 animate-fade-in">
-            {t("엄선된 화장품 원료 라인업", "Premium Cosmetic Ingredients Catalog")}
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-4">
+            {t("취급 원료 리스트", "Cosmetic Ingredients Catalog")}
           </h2>
-          <div className="h-1.5 w-16 bg-gradient-to-r from-indigo-600 to-sky-500 mx-auto mt-5 rounded-full" />
-          <p className="text-slate-500 text-sm mt-4">
+          <div className="h-1.5 w-16 bg-indigo-900 mx-auto mt-4 rounded-full" />
+          <p className="text-slate-500 text-sm mt-3">
             {t(
-              "모든 원료는 고순도 정밀 가공을 거쳐 국제 표준 규격(ISO) 및 식약처 기준을 100% 만족합니다.",
-              "All ingredients undergo high-purity precision processing and are 100% compliant with international ISO and global cosmetics regulatory standards."
+              "원하시는 원료명을 클릭하시면 CAS No., 규격, 포장 단위 및 상세 기능 정보를 확인하실 수 있습니다.",
+              "Click any raw material row to view CAS No., specification, packaging, and application details."
             )}
           </p>
         </div>
 
-        {/* Filter and Search Controls */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm mb-12 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6">
+        {/* Filters and Search Bar */}
+        <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm mb-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
           
           {/* Category Tabs */}
           <div className="flex flex-wrap gap-2">
@@ -106,191 +150,313 @@ export default function ProductSection({
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2.5 rounded-xl text-xs font-bold tracking-wide transition-all duration-150 cursor-pointer ${
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   selectedCategory === cat.id
-                    ? "bg-slate-900 text-white shadow-md shadow-slate-900/15"
-                    : "bg-slate-50 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 border border-slate-100"
+                    ? "bg-indigo-950 text-white shadow-sm"
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900"
                 }`}
               >
-                {cat.label}
+                {language === "en" ? cat.labelEn : cat.labelKo}
               </button>
             ))}
           </div>
 
-          {/* Search Box */}
+          {/* Search Input */}
           <div className="relative w-full md:max-w-xs">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
               <Search className="w-4 h-4" />
             </span>
             <input
               type="text"
-              placeholder={t("원료명, 영문명, 원산지 검색...", "Search ingredient, INCI, origin...")}
+              placeholder={t("원료명, INCI, CAS No. 검색...", "Search product, INCI, CAS No...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs font-medium pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors"
+              className="w-full text-xs font-medium pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-indigo-600 focus:bg-white transition-colors"
             />
           </div>
 
         </div>
 
-        {/* Active Category Description Notice */}
-        <div className="mb-8 pl-4 border-l-4 border-indigo-600">
-          <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
-            {selectedCategory === "all" ? "ALL CATEGORIES" : categories.find((c) => c.id === selectedCategory)?.label}
-          </p>
-          <p className="text-sm font-semibold text-slate-700 mt-1">
-            {categories.find((c) => c.id === selectedCategory)?.desc}
-          </p>
+        {/* Current Category Info Bar */}
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-indigo-900 inline-block" />
+            {selectedCategory === "all"
+              ? t("전체 원료 목록", "All Cosmetic Raw Materials")
+              : categories.find((c) => c.id === selectedCategory)?.[language === "en" ? "labelEn" : "labelKo"]}
+          </h3>
+          <span className="text-xs font-semibold text-slate-500">
+            {t(`총 ${filteredProducts.length}개 항목`, `Total ${filteredProducts.length} items`)}
+          </span>
         </div>
 
-        {/* Product Cards Grid */}
+        {/* Table View Matching User Reference Image */}
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((p) => (
-              <div
-                key={p.id}
-                className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200 flex flex-col justify-between overflow-hidden group"
-              >
-                {/* Header background decoration */}
-                <div className={`h-2.5 w-full ${
-                  p.category === "dye" ? "bg-pink-500" :
-                  p.category === "color" ? "bg-amber-600" :
-                  p.category === "humectant" ? "bg-sky-500" : "bg-emerald-500"
-                }`} />
-
-                {/* Body */}
-                <div className="p-5 flex-1 flex flex-col justify-between">
-                  <div>
-                    {/* Category Label */}
-                    <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-500 mb-3.5">
-                      {p.category === "dye" ? t("염료 (Dye)", "Dye") :
-                       p.category === "color" ? t("색소 (Color)", "Colorant") :
-                       p.category === "humectant" ? t("보습제", "Humectant") : t("기능성 원료", "Active Ingredient")}
-                    </span>
-
-                    <h4 className="text-base font-extrabold text-slate-800 leading-snug group-hover:text-indigo-600 transition-colors">
-                      {p.name}
-                    </h4>
-                    <p className="text-xs font-mono text-slate-400 font-medium mt-1 select-all">
-                      {p.englishName}
-                    </p>
-                    {p.casNumber && (
-                      <div className="mt-1.5">
-                        <span className="inline-flex items-center text-[10px] font-mono font-medium text-indigo-600 bg-indigo-50/70 border border-indigo-100/50 rounded px-2 py-0.5 select-all">
-                          CAS No. {p.casNumber}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Description (Translating key descriptions roughly or showing the custom descriptors) */}
-                    <p className="text-slate-500 text-xs mt-4 leading-relaxed line-clamp-3">
-                      {p.description}
-                    </p>
-                  </div>
-
-                  <div className="mt-6 space-y-4 pt-4 border-t border-slate-100">
-                    {/* Row 1: Origin & Specifications */}
-                    <div className="grid grid-cols-2 gap-2 text-[11px]">
-                      <div>
-                        <p className="text-[10px] text-slate-400 font-medium font-sans">{t("원산지", "Origin")}</p>
-                        <p className="font-semibold text-slate-700 mt-0.5">{p.origin}</p>
-                      </div>
-                      {p.specification && (
-                        <div>
-                          <p className="text-[10px] text-slate-400 font-medium font-sans">{t("규격/순도", "Purity Specs")}</p>
-                          <p className="font-mono font-semibold text-slate-700 mt-0.5">{p.specification}</p>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Row 2: Applications & Packing (Aligned) */}
-                    <div className="grid grid-cols-2 gap-2 text-[11px]">
-                      <div>
-                        <p className="text-[10px] text-slate-400 font-medium font-sans mb-1.5">{t("권장 적용 제형", "Applications")}</p>
-                        <div className="flex flex-wrap gap-1">
-                          {p.applications.map((app, idx) => (
-                            <span
-                              key={idx}
-                              className="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-600"
-                            >
-                              {translateApp(app)}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden border-t-4 border-t-indigo-900">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-100/90 text-slate-700 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                    <th scope="col" className="py-3.5 px-4 sm:px-6 w-1/4">PRODUCT NAME</th>
+                    <th scope="col" className="py-3.5 px-4 sm:px-6 w-1/4">INCI NAME</th>
+                    <th scope="col" className="py-3.5 px-4 sm:px-6 w-1/3">APPLICATION</th>
+                    <th scope="col" className="py-3.5 px-4 sm:px-6 w-1/6">MANUFACTURER</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200/80 text-sm">
+                  {filteredProducts.map((p) => (
+                    <tr
+                      key={p.id}
+                      onClick={() => setSelectedProductForModal(p)}
+                      className="hover:bg-indigo-50/50 transition-colors cursor-pointer group"
+                    >
+                      {/* Product Name */}
+                      <td className="py-4 px-4 sm:px-6 align-middle">
+                        <div className="flex flex-col">
+                          <span className="font-bold text-slate-900 text-sm group-hover:text-indigo-700 transition-colors">
+                            {p.name}
+                          </span>
+                          {p.casNumber && (
+                            <span className="text-[10px] font-mono text-indigo-600 font-semibold mt-0.5">
+                              CAS: {p.casNumber}
                             </span>
-                          ))}
+                          )}
                         </div>
-                      </div>
-                      {p.packing && (
-                        <div>
-                          <p className="text-[10px] text-slate-400 font-medium font-sans mb-1.5">{t("패킹 단위", "Packaging")}</p>
-                          <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">
-                            {p.packing}
+                      </td>
+
+                      {/* INCI Name */}
+                      <td className="py-4 px-4 sm:px-6 align-middle">
+                        <span className="text-slate-600 text-xs font-medium font-sans leading-relaxed block">
+                          {p.englishName}
+                        </span>
+                      </td>
+
+                      {/* Application / Function Description */}
+                      <td className="py-4 px-4 sm:px-6 align-middle">
+                        <div className="text-slate-600 text-xs leading-relaxed">
+                          <div className="flex flex-wrap gap-1 mb-1">
+                            {p.applications.map((app, idx) => (
+                              <span
+                                key={idx}
+                                className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-100/60"
+                              >
+                                {translateApp(app)}
+                              </span>
+                            ))}
+                          </div>
+                          <p className="text-slate-500 line-clamp-1 text-[11px] mt-0.5">
+                            {p.description}
+                          </p>
+                        </div>
+                      </td>
+
+                      {/* Manufacturer: Changed all to 중국 as requested */}
+                      <td className="py-4 px-4 sm:px-6 align-middle">
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-slate-800 text-xs">
+                            {t("중국", "China")}
+                          </span>
+                          <span className="text-xs text-indigo-600 font-bold opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline-flex items-center gap-0.5">
+                            {t("상세보기", "View")}
+                            <ChevronRight className="w-3.5 h-3.5" />
                           </span>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer Action */}
-                <div className="px-5 pb-5 pt-0">
-                  <button
-                    onClick={() => handleInquiryRequest(`${p.name} (${p.englishName})`)}
-                    className="w-full py-2.5 bg-slate-50 hover:bg-indigo-600 hover:text-white text-slate-700 text-xs font-bold rounded-xl border border-slate-100 transition-all duration-200 flex items-center justify-center space-x-1.5 cursor-pointer"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span>{t("이 원료 견적문의", "Get Quote for This")}</span>
-                  </button>
-                </div>
-
-              </div>
-            ))}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         ) : (
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-16 text-center shadow-inner max-w-xl mx-auto">
-            <Compass className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-            <h4 className="text-sm font-bold text-slate-800">{t("검색 조건과 일치하는 원료가 없습니다.", "No ingredients match your criteria.")}</h4>
-            <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-              {t(
-                "원료명을 다시 확인하시거나, 전체보기 필터에서 카테고리를 변경해 보세요. 원하시는 특정 원료가 있다면 견적문의 폼에 직접 입력해 주시면 감사하겠습니다.",
-                "Please verify spelling, or switch category tabs. If you require a specific chemical not cataloged, please submit a direct sourcing inquiry."
-              )}
+          <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center max-w-lg mx-auto">
+            <Compass className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+            <p className="text-sm font-bold text-slate-800">
+              {t("검색 조건과 일치하는 원료가 없습니다.", "No ingredients match your criteria.")}
+            </p>
+            <p className="text-xs text-slate-400 mt-1">
+              {t("원료명이나 CAS 번호를 다시 확인하시거나 전체보기 필터를 선택해 주세요.", "Check spelling or select All Products.")}
             </p>
             <button
               onClick={() => {
                 setSearchQuery("");
                 setSelectedCategory("all");
               }}
-              className="mt-6 px-4.5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-colors shadow-md cursor-pointer"
+              className="mt-4 px-4 py-2 bg-indigo-900 text-white text-xs font-bold rounded-lg cursor-pointer hover:bg-indigo-800 transition-colors"
             >
-              {t("필터 및 검색 초기화", "Reset Filter & Search")}
+              {t("초기화", "Reset")}
             </button>
           </div>
         )}
 
-        {/* Suggestion notice */}
-        <div className="bg-indigo-50/60 border border-indigo-100/50 rounded-2xl p-5.5 mt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-start space-x-3">
-            <div className="p-2 bg-white rounded-lg text-indigo-600 border border-indigo-100/50 shadow-sm shrink-0">
-              <Sparkles className="w-4 h-4" />
+        {/* Custom Sourcing Banner */}
+        <div className="bg-indigo-900 text-white rounded-2xl p-6 mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
+          <div className="flex items-center space-x-3">
+            <div className="p-2.5 bg-white/10 rounded-xl shrink-0">
+              <Sparkles className="w-5 h-5 text-amber-300" />
             </div>
             <div>
-              <p className="text-xs font-extrabold text-indigo-900">{t("찾으시는 원료가 라인업에 없으신가요?", "Looking for something not listed?")}</p>
-              <p className="text-[11px] text-indigo-700/80 mt-1 leading-relaxed">
+              <p className="text-sm font-bold">{t("원하시는 특정 원료가 있으신가요?", "Looking for specific cosmetic chemicals?")}</p>
+              <p className="text-xs text-indigo-200 mt-0.5">
                 {t(
-                  "에스티트레이딩은 글로벌 소싱망을 통해 본 목록 외에도 약 1,200여 종 이상의 화장품 화학 원료 및 천연 추출물 수입 공급이 가능합니다.",
-                  "ST Trading can import and supply over 1,200 specialized cosmetics raw chemicals, dyes, and organic natural extracts through our global manufacturer pipeline."
+                  "에스티트레이딩은 본 목록 외에도 약 1,200여 종 이상의 화장품 유효 원료 수입 맞춤 공급이 가능합니다.",
+                  "ST Trading provides custom sourcing for over 1,200 additional cosmetic raw materials upon request."
                 )}
               </p>
             </div>
           </div>
           <button
-            onClick={() => handleInquiryRequest("직접 입력 (기타 원료 소싱)")}
-            className="px-4.5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl shrink-0 cursor-pointer shadow-md shadow-indigo-600/10"
+            onClick={() => handleInquiryRequest("기타 맞춤 원료 수입 소싱 문의")}
+            className="px-5 py-2.5 bg-white text-indigo-900 hover:bg-amber-300 hover:text-indigo-950 text-xs font-extrabold rounded-xl shrink-0 cursor-pointer transition-colors shadow-sm"
           >
-            {t("기타 원료 소싱 문의", "Custom Sourcing Quote")}
+            {t("원료 소싱 견적 문의", "Custom Sourcing Quote")}
           </button>
         </div>
 
       </div>
+
+      {/* Product Detail Modal */}
+      {selectedProductForModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+          <div 
+            className="bg-white rounded-2xl max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="bg-indigo-900 text-white px-6 py-4 flex items-center justify-between border-b border-indigo-800 shrink-0">
+              <div className="flex items-center space-x-2">
+                <span className="px-2.5 py-0.5 rounded bg-indigo-800 text-amber-300 text-[10px] font-bold uppercase">
+                  {getCategoryLabel(selectedProductForModal.category)}
+                </span>
+                <span className="text-xs text-indigo-200 font-medium">원료 상세 사양서</span>
+              </div>
+              <button
+                onClick={() => setSelectedProductForModal(null)}
+                className="text-indigo-200 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto space-y-6">
+              {/* Product Title */}
+              <div>
+                <h3 className="text-2xl font-black text-slate-900 leading-tight">
+                  {selectedProductForModal.name}
+                </h3>
+                <p className="text-sm font-mono font-medium text-indigo-600 mt-1 select-all">
+                  INCI / English: {selectedProductForModal.englishName}
+                </p>
+              </div>
+
+              {/* Data Grid Table */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
+                <div>
+                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
+                    PRODUCT NAME (제품명)
+                  </span>
+                  <span className="font-bold text-slate-800">{selectedProductForModal.name}</span>
+                </div>
+
+                <div>
+                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
+                    INCI NAME (성분명)
+                  </span>
+                  <span className="font-semibold text-slate-800">{selectedProductForModal.englishName}</span>
+                </div>
+
+                <div>
+                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
+                    MANUFACTURER (제조사/제조국)
+                  </span>
+                  <span className="font-bold text-indigo-900 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100 inline-block">
+                    {t("중국 (China)", "China")}
+                  </span>
+                </div>
+
+                <div>
+                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
+                    CAS NUMBER
+                  </span>
+                  <span className="font-mono font-bold text-slate-800 select-all">
+                    {selectedProductForModal.casNumber || "N/A"}
+                  </span>
+                </div>
+
+                <div>
+                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
+                    PACKING (포장 단위)
+                  </span>
+                  <span className="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 inline-block">
+                    {selectedProductForModal.packing || "25KG"}
+                  </span>
+                </div>
+
+                <div>
+                  <span className="text-slate-400 font-bold block mb-1 uppercase tracking-wider text-[10px]">
+                    SPECIFICATION (순도/규격)
+                  </span>
+                  <span className="font-semibold text-slate-800">
+                    {selectedProductForModal.specification || "Cosmetic Grade (순도 ≥ 99.0%)"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Recommended Applications */}
+              <div>
+                <span className="text-slate-500 font-bold text-xs block mb-2 uppercase tracking-wider">
+                  RECOMMENDED APPLICATION (추천 적용 제형)
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedProductForModal.applications.map((app, idx) => (
+                    <span
+                      key={idx}
+                      className="text-xs font-bold px-3 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100"
+                    >
+                      {translateApp(app)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <span className="text-slate-500 font-bold text-xs block mb-2 uppercase tracking-wider">
+                  DESCRIPTION & FEATURES (원료 특성 및 설명)
+                </span>
+                <p className="text-slate-700 text-xs leading-relaxed bg-white p-4 rounded-xl border border-slate-200">
+                  {selectedProductForModal.description}
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="bg-slate-50 px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+              <span className="text-xs text-slate-500 font-medium hidden sm:inline">
+                {t("샘플 신청 및 MOQ 단가 문의 가능합니다.", "Sample requests and MOQ price quotes available.")}
+              </span>
+              <div className="flex items-center space-x-3 w-full sm:w-auto">
+                <button
+                  onClick={() => setSelectedProductForModal(null)}
+                  className="w-1/2 sm:w-auto px-4 py-2.5 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
+                >
+                  {t("닫기", "Close")}
+                </button>
+                <button
+                  onClick={() => handleInquiryRequest(`${selectedProductForModal.name} (${selectedProductForModal.englishName})`)}
+                  className="w-1/2 sm:w-auto px-5 py-2.5 bg-indigo-900 hover:bg-indigo-800 text-white text-xs font-bold rounded-xl transition-colors shadow-md flex items-center justify-center space-x-1.5 cursor-pointer"
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>{t("이 원료 견적 문의하기", "Get Quote for This")}</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </section>
   );
 }
