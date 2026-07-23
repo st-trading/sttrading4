@@ -12,6 +12,7 @@ export default function App() {
   const [activeView, setActiveView] = useState("home");
   const [activeSubView, setActiveSubView] = useState("all");
   const [selectedProduct, setSelectedProduct] = useState("");
+  const [productResetKey, setProductResetKey] = useState(0);
   const [isAdminDemo, setIsAdminDemo] = useState(false);
   const { t } = useLanguage();
 
@@ -21,6 +22,9 @@ export default function App() {
 
   const handleViewChange = (viewId: string, subId?: string) => {
     setActiveView(viewId);
+    if (viewId === "product") {
+      setProductResetKey((prev) => prev + 1);
+    }
     if (subId) {
       setActiveSubView(subId);
     } else {
@@ -64,6 +68,7 @@ export default function App() {
 
         {activeView === "product" && (
           <ProductSection
+            key={`product-${activeSubView}-${productResetKey}`}
             selectedCategory={activeSubView as any}
             setSelectedCategory={(cat) => handleViewChange("product", cat)}
             onSelectProduct={setSelectedProduct}

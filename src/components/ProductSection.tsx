@@ -5,6 +5,7 @@ import { Product, ProductCategory } from "../types";
 import { useLanguage } from "../contexts/LanguageContext";
 
 interface ProductSectionProps {
+  key?: string;
   onSelectProduct: (productName: string) => void;
   selectedCategory: ProductCategory | "all";
   setSelectedCategory: (category: ProductCategory | "all") => void;
@@ -22,17 +23,17 @@ export default function ProductSection({
   const [copied, setCopied] = useState(false);
   const { language, t } = useLanguage();
 
-  // Scroll to top when product is selected
+  // Scroll to top when product is selected or reset
   useEffect(() => {
     if (selectedProduct) {
-      const element = document.getElementById("product");
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
+      window.scrollTo({ top: 0, behavior: "instant" });
     }
   }, [selectedProduct]);
+
+  // Reset selectedProduct when category changes
+  useEffect(() => {
+    setSelectedProduct(null);
+  }, [selectedCategory]);
 
   const categories: { id: ProductCategory | "all"; labelKo: string; labelEn: string; descKo: string; descEn: string }[] = [
     {
@@ -154,7 +155,10 @@ export default function ProductSection({
           {/* Top Bar Navigation */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6 print:hidden">
             <button
-              onClick={() => setSelectedProduct(null)}
+              onClick={() => {
+                setSelectedProduct(null);
+                window.scrollTo({ top: 0, behavior: "instant" });
+              }}
               className="inline-flex items-center space-x-2 px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-indigo-900 transition-all shadow-sm cursor-pointer group"
             >
               <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:-translate-x-1 transition-transform" />
@@ -339,7 +343,10 @@ export default function ProductSection({
           {/* Bottom Back Button */}
           <div className="mt-8 text-center print:hidden">
             <button
-              onClick={() => setSelectedProduct(null)}
+              onClick={() => {
+                setSelectedProduct(null);
+                window.scrollTo({ top: 0, behavior: "instant" });
+              }}
               className="inline-flex items-center space-x-2 px-6 py-3 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-800 hover:bg-slate-50 transition-all shadow-sm cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4 text-slate-500" />
