@@ -52,10 +52,10 @@ export default function Navbar({
   const isActualAdmin = user?.email === "ehlolhan@gmail.com" || isAdminDemo;
 
   const navItems = [
-    { id: "home", label: t("홈", "HOME") },
+    { id: "home", label: t("HOME", "HOME") },
     {
       id: "company",
-      label: t("회사소개", "COMPANY"),
+      label: t("COMPANY", "COMPANY"),
       subItems: [
         { label: t("인사말", "Greeting"), subId: "greeting" },
         { label: t("회사연혁", "History"), subId: "history" },
@@ -64,7 +64,7 @@ export default function Navbar({
     },
     {
       id: "product",
-      label: t("취급원료", "PRODUCTS"),
+      label: t("PRODUCT", "PRODUCT"),
       subItems: [
         { label: t("전체보기", "All Raw Materials"), subId: "all" },
         { label: t("염료 / DYE", "Dyes (DYE)"), subId: "dye" },
@@ -73,7 +73,7 @@ export default function Navbar({
         { label: t("ACTIVE (기능성)", "Active Ingredients"), subId: "active" }
       ]
     },
-    { id: "inquiry", label: t("견적문의", "INQUIRY"), subItems: [{ label: t("견적문의", "Get Quote"), subId: "all" }] }
+    { id: "inquiry", label: t("INQUIRY", "INQUIRY"), subItems: [{ label: t("견적문의", "Get Quote"), subId: "all" }] }
   ];
 
   const handleNavClick = (viewId: string, subId?: string) => {
@@ -82,9 +82,9 @@ export default function Navbar({
   };
 
   return (
-    <header id="navbar-header" className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 text-slate-800 shadow-sm transition-all duration-300">
+    <header id="navbar-header" className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 text-slate-800 shadow-sm transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-24">
           
           {/* Logo Section */}
           <div className="flex items-center cursor-pointer group/logo" onClick={() => handleNavClick("home")}>

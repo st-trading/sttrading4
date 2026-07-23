@@ -54,7 +54,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-grow pt-20">
+      <main className="flex-grow pt-24">
         {activeView === "home" && (
           <Home onViewChange={handleViewChange} />
         )}
