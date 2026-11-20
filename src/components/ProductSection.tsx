@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Search, MessageSquare, Compass, ArrowLeft, Printer, Check, Sparkles, Building2, FileText, Share2, Info, ChevronRight } from "lucide-react";
+import { Search, MessageSquare, Compass, ArrowLeft, Printer, Check, Sparkles, Building2, FileText, Share2, Info } from "lucide-react";
 import { PRODUCTS } from "../data/products";
 import { Product, ProductCategory } from "../types";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -250,55 +250,55 @@ export default function ProductSection({
                   <span>{t("원료 기본 사양 및 공급 정보", "Basic Specifications & Supply Information")}</span>
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-200 rounded-xl overflow-hidden border border-slate-200 shadow-sm text-xs">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-200 rounded-xl overflow-hidden border border-slate-200 shadow-sm text-sm">
                   
-                  <div className="bg-slate-50 p-4">
-                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                  <div className="bg-slate-50 p-4 sm:p-5">
+                    <span className="text-slate-500 font-bold block text-[11px] uppercase tracking-wider mb-1">
                       PRODUCT NAME (제품명)
                     </span>
-                    <span className="font-extrabold text-slate-900 text-sm">{selectedProduct.name}</span>
+                    <span className="font-extrabold text-slate-900 text-base">{selectedProduct.name}</span>
                   </div>
 
-                  <div className="bg-slate-50 p-4">
-                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                  <div className="bg-slate-50 p-4 sm:p-5">
+                    <span className="text-slate-500 font-bold block text-[11px] uppercase tracking-wider mb-1">
                       INCI NAME (표성분명)
                     </span>
-                    <span className="font-bold text-slate-800">{selectedProduct.englishName}</span>
+                    <span className="font-bold text-slate-800 text-[15px]">{selectedProduct.englishName}</span>
                   </div>
 
-                  <div className="bg-white p-4">
-                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                  <div className="bg-white p-4 sm:p-5">
+                    <span className="text-slate-500 font-bold block text-[11px] uppercase tracking-wider mb-1">
                       MANUFACTURER (제조사 / 원산지)
                     </span>
-                    <div className="flex items-center space-x-1.5 font-bold text-indigo-950">
-                      <Building2 className="w-3.5 h-3.5 text-indigo-700" />
+                    <div className="flex items-center space-x-1.5 font-bold text-indigo-950 text-[15px]">
+                      <Building2 className="w-4 h-4 text-indigo-700" />
                       <span>{formatOrigin(selectedProduct.origin)}</span>
                     </div>
                   </div>
 
-                  <div className="bg-white p-4">
-                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                  <div className="bg-white p-4 sm:p-5">
+                    <span className="text-slate-500 font-bold block text-[11px] uppercase tracking-wider mb-1">
                       CAS NUMBER
                     </span>
-                    <span className="font-mono font-bold text-slate-900 select-all">
+                    <span className="font-mono font-bold text-slate-900 text-[15px] select-all">
                       {selectedProduct.casNumber || "N/A"}
                     </span>
                   </div>
 
-                  <div className="bg-slate-50 p-4">
-                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                  <div className="bg-slate-50 p-4 sm:p-5">
+                    <span className="text-slate-500 font-bold block text-[11px] uppercase tracking-wider mb-1">
                       PACKING (포장 단위)
                     </span>
-                    <span className="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-block">
+                    <span className="font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200 inline-block text-sm">
                       {selectedProduct.packing || "25KG"}
                     </span>
                   </div>
 
-                  <div className="bg-slate-50 p-4">
-                    <span className="text-slate-500 font-bold block text-[10px] uppercase tracking-wider mb-1">
+                  <div className="bg-slate-50 p-4 sm:p-5">
+                    <span className="text-slate-500 font-bold block text-[11px] uppercase tracking-wider mb-1">
                       SPECIFICATION (순도 및 등급)
                     </span>
-                    <span className="font-bold text-slate-800">
+                    <span className="font-bold text-slate-800 text-[15px]">
                       {selectedProduct.specification ?? "Cosmetic Grade (순도 ≥ 99.0%)"}
                     </span>
                   </div>
@@ -316,7 +316,7 @@ export default function ProductSection({
                   {selectedProduct.applications.map((app, idx) => (
                     <span
                       key={idx}
-                      className="px-3.5 py-1.5 rounded-lg bg-indigo-50 text-indigo-900 font-bold text-xs border border-indigo-200 shadow-2xs"
+                      className="px-3.5 py-1.5 rounded-lg bg-indigo-50 text-indigo-900 font-bold text-xs sm:text-sm border border-indigo-200 shadow-2xs"
                     >
                       {translateApp(app)}
                     </span>
@@ -330,7 +330,7 @@ export default function ProductSection({
                   <Info className="w-4 h-4 text-indigo-900" />
                   <span>{t("원료 주요 특징 및 효능 설명", "Key Features & Description")}</span>
                 </h2>
-                <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 text-slate-700 text-xs sm:text-sm leading-relaxed font-sans">
+                <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 text-slate-700 text-sm sm:text-[15px] leading-relaxed font-sans">
                   {selectedProduct.description}
                 </div>
               </div>
@@ -394,7 +394,7 @@ export default function ProductSection({
             {t("취급 원료 리스트", "Cosmetic Ingredients Catalog")}
           </h2>
           <div className="h-1.5 w-16 bg-indigo-900 mx-auto mt-4 rounded-full" />
-          <p className="text-slate-500 text-sm mt-3">
+          <p className="text-slate-600 text-sm sm:text-base mt-3">
             {t(
               "원하시는 원료명을 클릭하시면 CAS No., 규격, 포장 단위 및 상세 기능 사양서 화면이 열립니다.",
               "Click any raw material row to open its full Technical Specification Sheet."
@@ -411,10 +411,10 @@ export default function ProductSection({
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                   selectedCategory === cat.id
                     ? "bg-indigo-950 text-white shadow-sm"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900"
                 }`}
               >
                 {language === "en" ? cat.labelEn : cat.labelKo}
@@ -424,7 +424,7 @@ export default function ProductSection({
 
           {/* Search Input */}
           <div className="relative w-full md:max-w-xs">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
               <Search className="w-4 h-4" />
             </span>
             <input
@@ -432,7 +432,7 @@ export default function ProductSection({
               placeholder={t("원료명, INCI, CAS No. 검색...", "Search product, INCI, CAS No...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs font-medium pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-indigo-600 focus:bg-white transition-colors"
+              className="w-full text-sm font-medium pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-indigo-600 focus:bg-white transition-colors"
             />
           </div>
 
@@ -440,88 +440,71 @@ export default function ProductSection({
 
         {/* Current Category Info Bar */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-indigo-900 inline-block" />
             {selectedCategory === "all"
               ? t("전체 원료 목록", "All Cosmetic Raw Materials")
               : categories.find((c) => c.id === selectedCategory)?.[language === "en" ? "labelEn" : "labelKo"]}
           </h3>
-          <span className="text-xs font-semibold text-slate-500">
+          <span className="text-sm font-semibold text-slate-600">
             {t(`총 ${filteredProducts.length}개 항목`, `Total ${filteredProducts.length} items`)}
           </span>
         </div>
 
-        {/* Table View Matching User Reference Image */}
+        {/* Table View Matching User Reference Structure */}
         {filteredProducts.length > 0 ? (
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden border-t-4 border-t-indigo-900">
+          <div className="bg-white rounded-lg border-x border-b border-slate-200 border-t-2 border-t-indigo-900 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-center border-collapse">
                 <thead>
-                  <tr className="bg-slate-100/90 text-slate-700 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
-                    <th scope="col" className="py-3.5 px-4 sm:px-6 w-1/4">PRODUCT NAME</th>
-                    <th scope="col" className="py-3.5 px-4 sm:px-6 w-1/4">INCI NAME</th>
-                    <th scope="col" className="py-3.5 px-4 sm:px-6 w-1/3">APPLICATION</th>
-                    <th scope="col" className="py-3.5 px-4 sm:px-6 w-1/6">MANUFACTURER</th>
+                  <tr className="bg-white text-indigo-900 text-sm sm:text-[15px] font-bold tracking-wide border-b border-slate-200 divide-x divide-slate-200/70">
+                    <th scope="col" className="py-4 px-4 sm:px-6 w-[26%] text-center">
+                      {t("제품명", "PRODUCT NAME")}
+                    </th>
+                    <th scope="col" className="py-4 px-4 sm:px-6 w-[40%] text-center">
+                      {t("INCI", "INCI")}
+                    </th>
+                    <th scope="col" className="py-4 px-4 sm:px-6 w-[17%] text-center">
+                      {t("패킹", "PACKING")}
+                    </th>
+                    <th scope="col" className="py-4 px-4 sm:px-6 w-[17%] text-center">
+                      {t("제조사", "MANUFACTURER")}
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200/80 text-sm">
+                <tbody className="divide-y divide-slate-200/80 text-[15px]">
                   {filteredProducts.map((p) => (
                     <tr
                       key={p.id}
                       onClick={() => setSelectedProduct(p)}
-                      className="hover:bg-indigo-50/50 transition-colors cursor-pointer group"
+                      className="hover:bg-indigo-50/40 transition-colors cursor-pointer group divide-x divide-slate-200/60"
                     >
-                      {/* Product Name */}
-                      <td className="py-4 px-4 sm:px-6 align-middle">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-slate-900 text-sm group-hover:text-indigo-700 transition-colors">
-                            {p.name}
-                          </span>
-                          {p.casNumber && (
-                            <span className="text-[10px] font-mono text-indigo-600 font-semibold mt-0.5">
-                              CAS: {p.casNumber}
-                            </span>
-                          )}
-                        </div>
+                      {/* 제품명 */}
+                      <td className="py-4 sm:py-4.5 px-4 sm:px-6 align-middle text-center">
+                        <span className="font-bold text-slate-900 text-[15px] sm:text-base group-hover:text-indigo-700 transition-colors">
+                          {p.name}
+                        </span>
                       </td>
 
-                      {/* INCI Name */}
-                      <td className="py-4 px-4 sm:px-6 align-middle">
-                        <span className="text-slate-600 text-xs font-medium font-sans leading-relaxed block">
+                      {/* INCI */}
+                      <td className="py-4 sm:py-4.5 px-4 sm:px-6 align-middle text-center">
+                        <span className="text-slate-700 text-sm sm:text-[15px] font-medium font-sans leading-relaxed">
                           {p.englishName}
                         </span>
                       </td>
 
-                      {/* Application / Function Description */}
-                      <td className="py-4 px-4 sm:px-6 align-middle">
-                        <div className="text-slate-600 text-xs leading-relaxed">
-                          <div className="flex flex-wrap gap-1 mb-1">
-                            {p.applications.map((app, idx) => (
-                              <span
-                                key={idx}
-                                className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-100/60"
-                              >
-                                {translateApp(app)}
-                              </span>
-                            ))}
-                          </div>
-                          <p className="text-slate-500 line-clamp-1 text-[11px] mt-0.5">
-                            {p.description}
-                          </p>
-                        </div>
+                      {/* 패킹 */}
+                      <td className="py-4 sm:py-4.5 px-4 sm:px-6 align-middle text-center">
+                        <span className="text-slate-700 text-sm sm:text-[15px] font-medium">
+                          {p.packing || "25KG"}
+                        </span>
                       </td>
 
-                      {/* Manufacturer */}
-                      <td className="py-4 px-4 sm:px-6 align-middle">
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold text-slate-800 text-xs">
-                            {formatOrigin(p.origin, true)}
-                          </span>
-                          <span className="text-xs text-indigo-600 font-bold opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline-flex items-center gap-0.5">
-                            {t("상세보기", "View")}
-                            <ChevronRight className="w-3.5 h-3.5" />
-                          </span>
-                        </div>
+                      {/* 제조사 */}
+                      <td className="py-4 sm:py-4.5 px-4 sm:px-6 align-middle text-center">
+                        <span className="text-slate-700 text-sm sm:text-[15px] font-medium">
+                          {formatOrigin(p.origin, true)}
+                        </span>
                       </td>
                     </tr>
                   ))}

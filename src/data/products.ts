@@ -4,7 +4,7 @@ export const PRODUCTS: Product[] = [
   // 1. DYE / 염료
   {
     id: "dye-01",
-    name: "P-Phenylenediamine",
+    name: "P-PHENYLENEDIAMINE",
     englishName: "P-PHENYLENEDIAMINE",
     category: "dye",
     description: "염모제에 가장 널리 사용되는 핵심 염료 원료로서 뛰어난 침투력과 지속성 높은 흑갈색 계열 색상 발현을 제공합니다.",
@@ -16,7 +16,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "dye-02",
-    name: "M-Aminophenol",
+    name: "M-AMINOPHENOL",
     englishName: "M-AMINOPHENOL",
     category: "dye",
     description: "염모용 산성 및 알칼리성 제형 내에서 산화 중합을 유도하여 다양한 색조를 부여하는 필수 조색 원료입니다.",
@@ -28,7 +28,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "dye-03",
-    name: "P-Aminophenol",
+    name: "P-AMINOPHENOL",
     englishName: "P-AMINOPHENOL",
     category: "dye",
     description: "우수한 용해성과 산화 안정성을 바탕으로 자연스러운 갈색 및 황색 톤의 색조를 선사하는 고순도 산화 염모 원료입니다.",
@@ -40,7 +40,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "dye-04",
-    name: "Resorcinol",
+    name: "RESORCINOL",
     englishName: "RESORCINOL",
     category: "dye",
     description: "다양한 유효 성분 및 산화염료와 결합하여 풍부하고 다채로운 컬러 톤을 형성하는 커플러(Coupler) 역할의 핵심 성분입니다.",
@@ -471,4 +471,3 @@ export const COMPANY_HISTORY_EN: HistoryItem[] = [
     ]
   }
 ];
-
