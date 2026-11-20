@@ -70,6 +70,13 @@ export default function ProductSection({
       labelEn: "ACTIVE INGREDIENTS",
       descKo: "주름개선, 항산화, 진정 등 검증된 유효 기능성 성분",
       descEn: "Proven active ingredients for anti-aging, antioxidants & soothing"
+    },
+    {
+      id: "surfactant",
+      labelKo: "계면활성제/유화제",
+      labelEn: "SURFACTANTS & EMULSIFIERS",
+      descKo: "세정, 유화, 가용화 및 점도 조절을 돕는 고기능 계면활성제 및 유화제",
+      descEn: "High-performance surfactants and emulsifiers for cleansing, emulsification, and viscosity control"
     }
   ];
 
@@ -130,11 +137,15 @@ export default function ProductSection({
       case "color": return t("색소 (COLOR)", "Color");
       case "humectant": return t("보습제 (HUMECTANT)", "Humectant");
       case "active": return t("기능성원료 (ACTIVE)", "Active");
+      case "surfactant": return t("계면활성제/유화제", "Surfactant & Emulsifier");
       default: return "";
     }
   };
 
   const formatOrigin = (origin: string, compact = false) => {
+    if (origin.includes("KAO")) {
+      return t(origin, "KAO / Germany");
+    }
     if (origin.includes("프랑스")) {
       return t(compact ? "프랑스" : "프랑스 (France)", "France");
     }

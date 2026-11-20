@@ -1,4 +1,4 @@
-export type ProductCategory = "dye" | "color" | "humectant" | "active";
+export type ProductCategory = "dye" | "color" | "humectant" | "active" | "surfactant";
 
 export interface Product {
   id: string;

@@ -70,7 +70,8 @@ export default function Navbar({
         { label: t("염료 / DYE", "Dyes (DYE)"), subId: "dye" },
         { label: t("색소 / COLOR", "Colorants (COLOR)"), subId: "color" },
         { label: t("보습제 / HUMECTANT", "Humectants (HUMECTANT)"), subId: "humectant" },
-        { label: t("ACTIVE (기능성)", "Active Ingredients"), subId: "active" }
+        { label: t("ACTIVE (기능성)", "Active Ingredients"), subId: "active" },
+        { label: t("계면활성제/유화제", "Surfactants & Emulsifiers"), subId: "surfactant" }
       ]
     },
     { id: "inquiry", label: t("INQUIRY", "INQUIRY"), subItems: [{ label: t("견적문의", "Get Quote"), subId: "all" }] }

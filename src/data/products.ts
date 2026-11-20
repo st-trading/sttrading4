@@ -375,6 +375,20 @@ export const PRODUCTS: Product[] = [
     specification: "Purity ≥ 98.0%",
     casNumber: "53956-04-0",
     packing: "1KG"
+  },
+
+  // 5. SURFACTANT / 계면활성제·유화제
+  {
+    id: "surf-01",
+    name: "AKYPOROX RLM 22",
+    englishName: "Laureth-2",
+    category: "surfactant",
+    description: "우수한 유화력, 세정력 및 점도 조절 기능을 바탕으로 샴푸, 스킨케어 및 염모제 제형에 폭넓게 활용되는 비이온 계면활성제·유화제 원료입니다.",
+    applications: ["스킨케어", "헤어케어", "염모제"],
+    origin: "KAO / 독일",
+    specification: "Cosmetic Grade",
+    casNumber: "68439-50-9",
+    packing: "180KG 드럼"
   }
 ];
 
@@ -457,3 +471,4 @@ export const COMPANY_HISTORY_EN: HistoryItem[] = [
     ]
   }
 ];
+
