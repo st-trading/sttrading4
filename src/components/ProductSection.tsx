@@ -134,6 +134,16 @@ export default function ProductSection({
     }
   };
 
+  const formatOrigin = (origin: string, compact = false) => {
+    if (origin.includes("프랑스")) {
+      return t(compact ? "프랑스" : "프랑스 (France)", "France");
+    }
+    if (origin.includes("중국")) {
+      return t(compact ? "중국" : "중국 (China)", "China");
+    }
+    return origin;
+  };
+
   const handleCopyLink = () => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(window.location.href);
@@ -251,7 +261,7 @@ export default function ProductSection({
                     </span>
                     <div className="flex items-center space-x-1.5 font-bold text-indigo-950">
                       <Building2 className="w-3.5 h-3.5 text-indigo-700" />
-                      <span>{t("중국 (China)", "China")}</span>
+                      <span>{formatOrigin(selectedProduct.origin)}</span>
                     </div>
                   </div>
 
@@ -278,7 +288,7 @@ export default function ProductSection({
                       SPECIFICATION (순도 및 등급)
                     </span>
                     <span className="font-bold text-slate-800">
-                      {selectedProduct.specification || "Cosmetic Grade (순도 ≥ 99.0%)"}
+                      {selectedProduct.specification ?? "Cosmetic Grade (순도 ≥ 99.0%)"}
                     </span>
                   </div>
 
@@ -490,11 +500,11 @@ export default function ProductSection({
                         </div>
                       </td>
 
-                      {/* Manufacturer: 중국 */}
+                      {/* Manufacturer */}
                       <td className="py-4 px-4 sm:px-6 align-middle">
                         <div className="flex items-center justify-between">
                           <span className="font-semibold text-slate-800 text-xs">
-                            {t("중국", "China")}
+                            {formatOrigin(p.origin, true)}
                           </span>
                           <span className="text-xs text-indigo-600 font-bold opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline-flex items-center gap-0.5">
                             {t("상세보기", "View")}

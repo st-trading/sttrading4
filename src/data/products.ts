@@ -10,7 +10,7 @@ export const PRODUCTS: Product[] = [
     description: "염모제에 가장 널리 사용되는 핵심 염료 원료로서 뛰어난 침투력과 지속성 높은 흑갈색 계열 색상 발현을 제공합니다.",
     applications: ["염모제"],
     origin: "중국 (China)",
-    specification: "Purity ≥ 99.5%",
+    specification: "Purity ≥ 99.8%",
     casNumber: "106-50-3",
     packing: "25KG"
   },
@@ -22,7 +22,7 @@ export const PRODUCTS: Product[] = [
     description: "염모용 산성 및 알칼리성 제형 내에서 산화 중합을 유도하여 다양한 색조를 부여하는 필수 조색 원료입니다.",
     applications: ["염모제"],
     origin: "중국 (China)",
-    specification: "Purity ≥ 99.5%",
+    specification: "Purity ≥ 98.5%",
     casNumber: "591-27-5",
     packing: "25KG"
   },
@@ -34,7 +34,7 @@ export const PRODUCTS: Product[] = [
     description: "우수한 용해성과 산화 안정성을 바탕으로 자연스러운 갈색 및 황색 톤의 색조를 선사하는 고순도 산화 염모 원료입니다.",
     applications: ["염모제"],
     origin: "중국 (China)",
-    specification: "Purity ≥ 99.5%",
+    specification: "Purity ≥ 99.0%",
     casNumber: "123-30-8",
     packing: "25KG"
   },
@@ -58,7 +58,7 @@ export const PRODUCTS: Product[] = [
     description: "적갈색 및 붉은색 계열의 생생하고 깊이 있는 색조를 구현하기 위해 필수적으로 사용되는 염모 조색 원료입니다.",
     applications: ["염모제"],
     origin: "중국 (China)",
-    specification: "Purity ≥ 99.5%",
+    specification: "Purity ≥ 99.9%",
     casNumber: "2835-95-2",
     packing: "25KG"
   },
@@ -70,7 +70,7 @@ export const PRODUCTS: Product[] = [
     description: "PPD 대체 혹은 혼용 원료로서 안정적이고 자극이 적은 고순도 염모 활성 베이스 성분입니다.",
     applications: ["염모제"],
     origin: "중국 (China)",
-    specification: "Purity ≥ 99.5%",
+    specification: "Purity ≥ 99.0%",
     casNumber: "615-50-9",
     packing: "25KG"
   },
@@ -90,39 +90,17 @@ export const PRODUCTS: Product[] = [
   // 2. COLOR / 색소
   {
     id: "color-01",
-    name: "ACID ORANGE 7 (ORANGE 205)",
-    englishName: "Acid Orange 7 (CI 15510)",
-    category: "color",
-    description: "선명하고 맑은 오렌지빛 컬러를 내는 산성계 타르 색소로, 일시적 및 반영구 헤어 컬러 제형에서 우수한 침투력과 지속적인 발색력을 보입니다.",
-    applications: ["COLORANTS"],
-    origin: "중국 (China)",
-    casNumber: "633-96-5",
-    packing: "1KG"
-  },
-  {
-    id: "color-02",
-    name: "ACID BLACK (BLACK 401)",
-    englishName: "Acid Black 1 (CI 20470)",
-    category: "color",
-    description: "짙고 차분한 블랙 및 푸른 빛 색조의 완벽한 밸런스를 조율하는 친수성 산성 색소로서 선명한 톤을 연출합니다.",
-    applications: ["COLORANTS"],
-    origin: "중국 (China)",
-    casNumber: "1064-48-8",
-    packing: "1KG"
-  },
-  {
-    id: "color-03",
     name: "HC VIOLET 2",
     englishName: "HC Violet No. 2",
     category: "color",
     description: "반영구 염모제 및 헤어 트리트먼트 제형에 이상적인 직접 염색 색소로서, 모발 깊숙이 조화롭고 따뜻한 보라색 컬러를 발현합니다.",
     applications: ["COLORANTS"],
     origin: "중국 (China)",
-    casNumber: "104226-21-3",
+    casNumber: "104226-19-9",
     packing: "1KG"
   },
   {
-    id: "color-04",
+    id: "color-02",
     name: "HC BLUE 2",
     englishName: "HC Blue No. 2",
     category: "color",
@@ -133,29 +111,67 @@ export const PRODUCTS: Product[] = [
     packing: "1KG"
   },
   {
-    id: "color-05",
-    name: "ACID RED 18(RED 102)",
-    englishName: "Acid Red 18 (CI 16255)",
+    id: "color-03",
+    name: "ACID BLACK 1 (BLACK 401)",
+    englishName: "Acid Black 1 (CI 20470)",
     category: "color",
-    description: "수용성이 우수한 산성 적색 타르 색소로서 높은 발색 안정도를 가지고 있어 선명한 레드 및 웜톤 헤어 조색을 가능하게 합니다.",
+    description: "짙고 차분한 블랙 및 푸른 빛 색조의 완벽한 밸런스를 조율하는 친수성 산성 색소로서 선명한 톤을 연출합니다.",
     applications: ["COLORANTS"],
     origin: "중국 (China)",
-    casNumber: "2611-82-7",
+    specification: "",
+    casNumber: "1064-48-8",
+    packing: "1KG"
+  },
+  {
+    id: "color-04",
+    name: "ACID ORANGE 7 (ORANGE 205)",
+    englishName: "Acid Orange 7 (CI 15510)",
+    category: "color",
+    description: "선명하고 맑은 오렌지빛 컬러를 내는 산성계 타르 색소로, 일시적 및 반영구 헤어 컬러 제형에서 우수한 침투력과 지속적인 발색력을 보입니다.",
+    applications: ["COLORANTS"],
+    origin: "중국 (China)",
+    specification: "",
+    casNumber: "633-96-5",
+    packing: "1KG"
+  },
+  {
+    id: "color-05",
+    name: "ACID YELLOW 11(YELLOW 407)",
+    englishName: "Acid Yellow 11 (CI 18820)",
+    category: "color",
+    description: "제형 내 안정적인 용해도와 조색 능력을 자랑하는 옐로우 컬러 산성 성분으로, 자연스러운 모발의 골드브라운 톤을 보조합니다.",
+    applications: ["COLORANTS"],
+    origin: "중국 (China)",
+    specification: "",
+    casNumber: "6359-82-6",
     packing: "1KG"
   },
   {
     id: "color-06",
-    name: "ACID VIOLET 43(VIOLET 401)",
-    englishName: "Acid Violet 43 (CI 60730)",
+    name: "ACID BLUE 9(BLUE 1)",
+    englishName: "Acid Blue 9 (CI 42090)",
     category: "color",
-    description: "황색 톤의 보색 대비에 필수적인 보라색 계열 산성 색소로, 황색을 효과적으로 중화하여 우아한 애쉬 실버 톤을 선사합니다.",
+    description: "맑고 투명한 하늘빛 블루 컬러를 구현하는 대표적 타르 색소로, 소량만으로도 제형의 완성도 있는 발색을 유지해 줍니다.",
     applications: ["COLORANTS"],
     origin: "중국 (China)",
-    casNumber: "4430-18-6",
+    specification: "",
+    casNumber: "3844-45-9",
     packing: "1KG"
   },
   {
     id: "color-07",
+    name: "ACID RED 52(RED 106)",
+    englishName: "Acid Red 52 (CI 45100)",
+    category: "color",
+    description: "시선을 사로잡는 선명하고 세련된 형광 핑크 및 로즈빛 톤을 발현하여 모발에 강렬한 영감을 불어넣는 고급 색소 성분입니다.",
+    applications: ["COLORANTS"],
+    origin: "중국 (China)",
+    specification: "",
+    casNumber: "3520-42-1",
+    packing: "1KG"
+  },
+  {
+    id: "color-08",
     name: "RED 201",
     englishName: "CI 15850 / D&C Red No. 6",
     category: "color",
@@ -163,39 +179,6 @@ export const PRODUCTS: Product[] = [
     applications: ["COLORANTS"],
     origin: "중국 (China)",
     casNumber: "5858-81-1",
-    packing: "1KG"
-  },
-  {
-    id: "color-08",
-    name: "ACID YELLOW 11(YELLOW 407)",
-    englishName: "Acid Yellow 11 (CI 18820)",
-    category: "color",
-    description: "제형 내 안정적인 용해도와 조색 능력을 자랑하는 옐로우 컬러 산성 성분으로, 자연스러운 모발의 골드브라운 톤을 보조합니다.",
-    applications: ["COLORANTS"],
-    origin: "중국 (China)",
-    casNumber: "6359-82-6",
-    packing: "1KG"
-  },
-  {
-    id: "color-09",
-    name: "ACID BLUE 9(BLUE 1)",
-    englishName: "Acid Blue 9 (CI 42090)",
-    category: "color",
-    description: "맑고 투명한 하늘빛 블루 컬러를 구현하는 대표적 타르 색소로, 소량만으로도 제형의 완성도 있는 발색을 유지해 줍니다.",
-    applications: ["COLORANTS"],
-    origin: "중국 (China)",
-    casNumber: "3844-45-9",
-    packing: "1KG"
-  },
-  {
-    id: "color-10",
-    name: "ACID RED 52(RED 106)",
-    englishName: "Acid Red 52 (CI 45100)",
-    category: "color",
-    description: "시선을 사로잡는 선명하고 세련된 형광 핑크 및 로즈빛 톤을 발현하여 모발에 강렬한 영감을 불어넣는 고급 색소 성분입니다.",
-    applications: ["COLORANTS"],
-    origin: "중국 (China)",
-    casNumber: "3520-42-1",
     packing: "1KG"
   },
 
@@ -209,7 +192,7 @@ export const PRODUCTS: Product[] = [
     applications: ["스킨케어", "헤어케어"],
     origin: "중국 (China)",
     specification: "1.3m Da / 2.6m Da",
-    casNumber: "9004-61-9",
+    casNumber: "9067-32-7",
     packing: "1KG"
   },
   {
@@ -221,7 +204,7 @@ export const PRODUCTS: Product[] = [
     applications: ["스킨케어", "헤어케어"],
     origin: "중국 (China)",
     specification: "10k Da ~ 100k Da",
-    casNumber: "9004-61-9",
+    casNumber: "9067-32-7",
     packing: "1KG"
   },
   {
@@ -233,7 +216,7 @@ export const PRODUCTS: Product[] = [
     applications: ["스킨케어", "헤어케어"],
     origin: "중국 (China)",
     specification: "10k Da 미만",
-    casNumber: "9004-61-9",
+    casNumber: "9067-32-7",
     packing: "1KG"
   },
   {
@@ -251,7 +234,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "hum-05",
     name: "DL-Panthenol",
-    englishName: "DL-Panthenol",
+    englishName: "Panthenol",
     category: "humectant",
     description: "피부와 모발에 비타민 B5를 공급하여 손상 방지 및 보습력을 극대화하고 자극받은 두피와 피부를 편안하게 진정시킵니다.",
     applications: ["스킨케어", "헤어케어"],
@@ -261,7 +244,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "hum-06",
-    name: "Silk Powder",
+    name: "Silk Peptide Powder",
     englishName: "Hydrolyzed Silk",
     category: "humectant",
     description: "천연 실크 단백질을 가수분해하여 얻은 성분으로 모발과 피부에 실키하고 부드러운 감촉을 주며 아미노산 공급을 통해 컨디셔닝을 극대화합니다.",
@@ -276,7 +259,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "act-01",
     name: "COQ10",
-    englishName: "Coenzyme Q10",
+    englishName: "Ubiquinone",
     category: "active",
     description: "강력한 항산화 활성 성분으로 모발과 피부의 노화를 예방하고 건강한 에너지와 탄력을 선사합니다.",
     applications: ["안티에이징", "스킨케어"],
@@ -300,7 +283,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "act-03",
     name: "D-Biotin",
-    englishName: "D-Biotin",
+    englishName: "Biotin",
     category: "active",
     description: "두피와 모근을 튼튼하게 강화하고 모발 탄력 및 윤기 회복에 도움을 주는 고순도 바이오틴 성분입니다.",
     applications: ["두피케어", "헤어케어"],
@@ -316,7 +299,7 @@ export const PRODUCTS: Product[] = [
     category: "active",
     description: "각질 제거 및 피지 조절, 항염 작용이 뛰어나 트러블성 스킨케어와 비듬 방지 두피 케어 제품에 핵심으로 적용됩니다.",
     applications: ["스킨케어", "두피케어"],
-    origin: "중국 (China)",
+    origin: "프랑스 (France)",
     specification: "Purity ≥ 99.0%",
     casNumber: "69-72-7",
     packing: "25KG"
@@ -336,12 +319,12 @@ export const PRODUCTS: Product[] = [
   {
     id: "act-06",
     name: "4-Hydroxyacetophenone",
-    englishName: "4-Hydroxyacetophenone",
+    englishName: "Hydroxyacetophenone",
     category: "active",
     description: "자극이 적은 안전한 방부 대체 보존 활성 원료이자 항산화, 항염 효과가 뛰어난 멀티 기능성 안정제 성분입니다.",
     applications: ["스킨케어", "제품안정화"],
     origin: "중국 (China)",
-    specification: "Purity ≥ 99.5%",
+    specification: "Purity ≥ 99.0%",
     casNumber: "99-93-4",
     packing: "25KG"
   },
@@ -365,7 +348,7 @@ export const PRODUCTS: Product[] = [
     description: "식물 유래 천연 폴리페놀 항산화 성분으로 우수한 활성 산소 제거 및 산화 방지 능력을 자랑하며, 톤 개선과 보존력 향상에 기여합니다.",
     applications: ["스킨케어", "헤어케어"],
     origin: "중국 (China)",
-    specification: "Purity ≥ 98.0%",
+    specification: "Purity ≥ 99.0%",
     casNumber: "149-91-7",
     packing: "25KG"
   },
@@ -397,7 +380,7 @@ export const PRODUCTS: Product[] = [
 
 export const CEO_MESSAGE: CEOMessage = {
   title: "더 깨끗하고 우수한 원료로,\nK-Beauty의 글로벌 도약을 함께합니다.",
-  subtitle: "에스티트레이딩은 정직함과 정밀함을 바탕으로 최고의 화장품 원료를 공급합니다.",
+  subtitle: "에스티트레이딩은 정직함과 정밀함을 바탕으로\n최고의 화장품 원료를 공급합니다.",
   content: [
     "안녕하십니까. 에스티트레이딩 대표이사입니다.",
     "급변하는 글로벌 화장품 시장 속에서 한국의 화장품 브랜드와 화장품 제조사들은 기술력과 기획력을 입증하며 세계 시장을 리드하고 있습니다. 이에 발맞춰 에스티트레이딩은 고순도 염료, 안료, 보습 성분 및 검증된 고기능성 원료를 세계 각국의 전문 제조 파트너로부터 엄선하여 고객사 여러분께 제공하고 있습니다.",
@@ -474,4 +457,3 @@ export const COMPANY_HISTORY_EN: HistoryItem[] = [
     ]
   }
 ];
-
