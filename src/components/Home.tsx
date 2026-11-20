@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Award, FileText, Compass } from "lucide-react";
+import { Award, FileText, Compass, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
 // Define main slides using local static assets for instant 0-lag rendering with multi-tier fallbacks
@@ -60,6 +60,8 @@ export default function Home({ onViewChange }: HomeProps) {
   const { t, language } = useLanguage();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [prevIdx, setPrevIdx] = useState(0);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
   
   const SLIDE_DURATION = 8000; // 8 seconds per slide transition as requested
 
@@ -82,14 +84,21 @@ export default function Home({ onViewChange }: HomeProps) {
     });
   }, []);
 
-  // Set up high-reliability slideshow autoplay
+  const handlePrev = useCallback(() => {
+    setCurrentIdx((prev) => {
+      setPrevIdx(prev);
+      return (prev - 1 + slides.length) % slides.length;
+    });
+  }, []);
+
+  // Set up high-reliability slideshow autoplay (resets timer after manual slide changes)
   useEffect(() => {
     const timer = setInterval(() => {
       handleNext();
     }, SLIDE_DURATION);
 
     return () => clearInterval(timer);
-  }, [handleNext]);
+  }, [handleNext, currentIdx]);
 
   const selectSlide = (index: number) => {
     if (index === currentIdx) return;
@@ -97,11 +106,38 @@ export default function Home({ onViewChange }: HomeProps) {
     setCurrentIdx(index);
   };
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length !== 1) return;
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const diffX = endX - touchStartXRef.current;
+    const diffY = endY - touchStartYRef.current;
+
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+
+    if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY) * 1.2) {
+      if (diffX < 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+  };
+
   const activeSlide = slides[currentIdx];
 
   return (
     <div 
-      className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden py-12 lg:py-0 bg-slate-900"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden py-12 lg:py-0 bg-slate-900 touch-pan-y select-none"
     >
       {/* 1. Full-Bleed Background Slideshow with instant initial load & seamless previous-slide layering */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-900">
@@ -167,11 +203,30 @@ export default function Home({ onViewChange }: HomeProps) {
         })}
       </div>
 
+      {/* Left & Right Manual Slide Navigation Arrows */}
+      <button
+        type="button"
+        onClick={handlePrev}
+        aria-label={t("이전 슬라이드", "Previous slide")}
+        className="absolute left-2.5 sm:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/25 hover:bg-black/50 text-white/90 hover:text-white border border-white/25 backdrop-blur-sm flex items-center justify-center transition-all duration-200 shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/60 active:scale-95"
+      >
+        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+      </button>
+
+      <button
+        type="button"
+        onClick={handleNext}
+        aria-label={t("다음 슬라이드", "Next slide")}
+        className="absolute right-2.5 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/25 hover:bg-black/50 text-white/90 hover:text-white border border-white/25 backdrop-blur-sm flex items-center justify-center transition-all duration-200 shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/60 active:scale-95"
+      >
+        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+      </button>
+
       {/* 2. Main Content Layout Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col justify-between min-h-[82vh] py-8 sm:py-12">
         
         {/* Top/Middle: Main Hero Text Area */}
-        <div className="w-full flex flex-col items-center text-center max-w-4xl mx-auto pt-14 sm:pt-20 lg:pt-28 space-y-5">
+        <div className="w-full flex flex-col items-center text-center max-w-4xl mx-auto px-9 sm:px-14 lg:px-8 pt-14 sm:pt-20 lg:pt-28 space-y-5">
           
           {/* Dynamic Text Area with smooth cross-fade animation */}
           <div className="w-full min-h-[140px] sm:min-h-[170px] flex flex-col justify-center text-center">
