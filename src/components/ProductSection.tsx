@@ -9,6 +9,8 @@ interface ProductSectionProps {
   onSelectProduct: (productName: string) => void;
   selectedCategory: ProductCategory | "all";
   setSelectedCategory: (category: ProductCategory | "all") => void;
+  selectedProductId?: string | null;
+  onSelectProductDetail?: (productId: string | null) => void;
   onViewChange?: (view: string, subView?: string) => void;
 }
 
@@ -16,24 +18,45 @@ export default function ProductSection({
   onSelectProduct,
   selectedCategory,
   setSelectedCategory,
+  selectedProductId,
+  onSelectProductDetail,
   onViewChange
 }: ProductSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [internalSelectedProductId, setInternalSelectedProductId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const { language, t } = useLanguage();
 
-  // Scroll to top when product is selected or reset
+  const isControlledDetail = selectedProductId !== undefined && onSelectProductDetail !== undefined;
+  const activeProductId = isControlledDetail ? selectedProductId : internalSelectedProductId;
+
+  const selectedProduct = useMemo(() => {
+    if (!activeProductId) return null;
+    return PRODUCTS.find((p) => p.id === activeProductId) ?? null;
+  }, [activeProductId]);
+
+  const setSelectedProduct = (product: Product | null) => {
+    const nextId = product ? product.id : null;
+    if (onSelectProductDetail) {
+      onSelectProductDetail(nextId);
+    } else {
+      setInternalSelectedProductId(nextId);
+    }
+  };
+
+  // Scroll to top when product is selected
   useEffect(() => {
     if (selectedProduct) {
       window.scrollTo({ top: 0, behavior: "instant" });
     }
   }, [selectedProduct]);
 
-  // Reset selectedProduct when category changes
+  // Reset internal selectedProduct when category changes in uncontrolled mode
   useEffect(() => {
-    setSelectedProduct(null);
-  }, [selectedCategory]);
+    if (!isControlledDetail) {
+      setInternalSelectedProductId(null);
+    }
+  }, [selectedCategory, isControlledDetail]);
 
   const categories: { id: ProductCategory | "all"; labelKo: string; labelEn: string; descKo: string; descEn: string }[] = [
     {
@@ -110,11 +133,11 @@ export default function ProductSection({
   }, [searchQuery, selectedCategory]);
 
   const handleInquiryRequest = (productName: string) => {
-    setSelectedProduct(null);
     onSelectProduct(productName);
     if (onViewChange) {
       onViewChange("inquiry");
     } else {
+      setSelectedProduct(null);
       const element = document.getElementById("inquiry");
       if (element) {
         const offset = 80;

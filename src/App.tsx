@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import Company from "./components/Company";
@@ -8,38 +8,125 @@ import AdminPortal from "./components/AdminPortal";
 import { Mail, Phone, MapPin, Shield, Building, Globe } from "lucide-react";
 import { useLanguage } from "./contexts/LanguageContext";
 
+interface AppHistoryState {
+  viewId: string;
+  subView: string;
+  productId: string | null;
+}
+
+const VALID_VIEWS = new Set(["home", "company", "product", "inquiry", "admin"]);
+
+const getDefaultSubView = (viewId: string, subId?: string): string => {
+  if (subId) return subId;
+  if (viewId === "company") return "greeting";
+  return "all";
+};
+
+const parseHash = (hash: string): AppHistoryState => {
+  const cleaned = hash.replace(/^#\/?/, "").trim();
+  if (!cleaned) {
+    return { viewId: "home", subView: "all", productId: null };
+  }
+  const [rawView, rawSub, rawProductId] = cleaned.split("/");
+  const viewId = VALID_VIEWS.has(rawView) ? rawView : "home";
+  const subView = getDefaultSubView(viewId, rawSub || undefined);
+  const productId = viewId === "product" && rawProductId ? rawProductId : null;
+  return { viewId, subView, productId };
+};
+
+const buildHash = (viewId: string, subView: string, productId: string | null): string => {
+  if (viewId === "home") return "";
+  if (viewId === "product") {
+    return productId ? `#product/${subView || "all"}/${productId}` : `#product/${subView || "all"}`;
+  }
+  if (viewId === "company") {
+    return `#company/${subView || "greeting"}`;
+  }
+  return `#${viewId}`;
+};
+
 export default function App() {
-  const [activeView, setActiveView] = useState("home");
-  const [activeSubView, setActiveSubView] = useState("all");
+  const [initialRoute] = useState<AppHistoryState>(() => parseHash(window.location.hash));
+  const [activeView, setActiveView] = useState(initialRoute.viewId);
+  const [activeSubView, setActiveSubView] = useState(initialRoute.subView);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(initialRoute.productId);
   const [selectedProduct, setSelectedProduct] = useState("");
-  const [productResetKey, setProductResetKey] = useState(0);
   const [isAdminDemo, setIsAdminDemo] = useState(false);
   const { t } = useLanguage();
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.title = t("에스티트레이딩", "ST Trading");
   }, [t]);
 
-  const handleViewChange = (viewId: string, subId?: string) => {
-    setActiveView(viewId);
-    if (viewId === "product") {
-      setProductResetKey((prev) => prev + 1);
-    }
-    if (subId) {
-      setActiveSubView(subId);
-    } else {
-      // Setup smart defaults
-      if (viewId === "company") {
-        setActiveSubView("greeting");
-      } else if (viewId === "product") {
-        setActiveSubView("all");
+  useEffect(() => {
+    const initialState: AppHistoryState = {
+      viewId: initialRoute.viewId,
+      subView: initialRoute.subView,
+      productId: initialRoute.productId
+    };
+    const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    window.history.replaceState(initialState, "", currentUrl);
+
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state as AppHistoryState | null;
+      if (state && state.viewId && VALID_VIEWS.has(state.viewId)) {
+        setActiveView(state.viewId);
+        setActiveSubView(getDefaultSubView(state.viewId, state.subView));
+        setSelectedProductId(state.productId ?? null);
       } else {
-        setActiveSubView("all");
+        const parsed = parseHash(window.location.hash);
+        setActiveView(parsed.viewId);
+        setActiveSubView(parsed.subView);
+        setSelectedProductId(parsed.productId);
       }
+      window.scrollTo({ top: 0, behavior: "instant" });
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [initialRoute]);
+
+  const handleViewChange = useCallback((viewId: string, subId?: string) => {
+    const nextSubView = getDefaultSubView(viewId, subId);
+
+    if (viewId === activeView && nextSubView === activeSubView && selectedProductId === null) {
+      window.scrollTo({ top: 0, behavior: "instant" });
+      return;
     }
-    // Instantly scroll to the top of the page when shifting views
+
+    setActiveView(viewId);
+    setActiveSubView(nextSubView);
+    setSelectedProductId(null);
+
+    const nextState: AppHistoryState = {
+      viewId,
+      subView: nextSubView,
+      productId: null
+    };
+    const nextHash = buildHash(viewId, nextSubView, null);
+    const nextUrl = `${window.location.pathname}${window.location.search}${nextHash}`;
+    window.history.pushState(nextState, "", nextUrl);
+
     window.scrollTo({ top: 0, behavior: "instant" });
-  };
+  }, [activeView, activeSubView, selectedProductId]);
+
+  const handleSelectProductDetail = useCallback((productId: string | null) => {
+    if (productId === selectedProductId && activeView === "product") {
+      return;
+    }
+
+    setSelectedProductId(productId);
+    const nextState: AppHistoryState = {
+      viewId: "product",
+      subView: activeSubView,
+      productId
+    };
+    const nextHash = buildHash("product", activeSubView, productId);
+    const nextUrl = `${window.location.pathname}${window.location.search}${nextHash}`;
+    window.history.pushState(nextState, "", nextUrl);
+
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [activeSubView, activeView, selectedProductId]);
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-indigo-500 selection:text-white antialiased">
@@ -68,9 +155,10 @@ export default function App() {
 
         {activeView === "product" && (
           <ProductSection
-            key={`product-${activeSubView}-${productResetKey}`}
             selectedCategory={activeSubView as any}
             setSelectedCategory={(cat) => handleViewChange("product", cat)}
+            selectedProductId={selectedProductId}
+            onSelectProductDetail={handleSelectProductDetail}
             onSelectProduct={setSelectedProduct}
             onViewChange={handleViewChange}
           />
