@@ -453,11 +453,11 @@ export default function ProductSection({
 
         {/* Table View Matching User Reference Structure */}
         {filteredProducts.length > 0 ? (
-          <div className="bg-white rounded-lg border-x border-b border-slate-200 border-t-2 border-t-indigo-900 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-lg border border-slate-200/80 border-t-2 border-t-indigo-900 shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-center border-collapse">
                 <thead>
-                  <tr className="bg-white text-indigo-900 text-sm sm:text-[15px] font-bold tracking-wide border-b border-slate-200 divide-x divide-slate-200/70">
+                  <tr className="bg-white text-indigo-800 text-sm sm:text-[15px] font-semibold tracking-wide border-b border-slate-200/90 divide-x divide-slate-100">
                     <th scope="col" className="py-4 px-4 sm:px-6 w-[26%] text-center">
                       {t("제품명", "PRODUCT NAME")}
                     </th>
@@ -472,37 +472,37 @@ export default function ProductSection({
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200/80 text-[15px]">
+                <tbody className="divide-y divide-slate-200/70 text-sm sm:text-[15px] text-slate-600 font-normal">
                   {filteredProducts.map((p) => (
                     <tr
                       key={p.id}
                       onClick={() => setSelectedProduct(p)}
-                      className="hover:bg-indigo-50/40 transition-colors cursor-pointer group divide-x divide-slate-200/60"
+                      className="hover:bg-indigo-50/35 transition-colors cursor-pointer group divide-x divide-slate-100"
                     >
                       {/* 제품명 */}
-                      <td className="py-4 sm:py-4.5 px-4 sm:px-6 align-middle text-center">
-                        <span className="font-bold text-slate-900 text-[15px] sm:text-base group-hover:text-indigo-700 transition-colors">
+                      <td className="py-3.5 sm:py-4 px-4 sm:px-6 align-middle text-center">
+                        <span className="text-slate-700 group-hover:text-indigo-700 transition-colors leading-relaxed">
                           {p.name}
                         </span>
                       </td>
 
                       {/* INCI */}
-                      <td className="py-4 sm:py-4.5 px-4 sm:px-6 align-middle text-center">
-                        <span className="text-slate-700 text-sm sm:text-[15px] font-medium font-sans leading-relaxed">
+                      <td className="py-3.5 sm:py-4 px-4 sm:px-6 align-middle text-center">
+                        <span className="text-slate-600 font-sans leading-relaxed">
                           {p.englishName}
                         </span>
                       </td>
 
                       {/* 패킹 */}
-                      <td className="py-4 sm:py-4.5 px-4 sm:px-6 align-middle text-center">
-                        <span className="text-slate-700 text-sm sm:text-[15px] font-medium">
+                      <td className="py-3.5 sm:py-4 px-4 sm:px-6 align-middle text-center">
+                        <span className="text-slate-600 leading-relaxed">
                           {p.packing || "25KG"}
                         </span>
                       </td>
 
                       {/* 제조사 */}
-                      <td className="py-4 sm:py-4.5 px-4 sm:px-6 align-middle text-center">
-                        <span className="text-slate-700 text-sm sm:text-[15px] font-medium">
+                      <td className="py-3.5 sm:py-4 px-4 sm:px-6 align-middle text-center">
+                        <span className="text-slate-600 leading-relaxed">
                           {formatOrigin(p.origin, true)}
                         </span>
                       </td>
