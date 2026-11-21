@@ -379,7 +379,7 @@ export default function ProductSection({
             {/* Document Footer */}
             <div className="bg-slate-100 px-6 py-4 border-t border-slate-200 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500 font-medium">
               <span>© ST TRADING. All Rights Reserved. 안양ISBIZ타워 729A호 / B148호</span>
-              <span>TEL: 031-5196-6151 | EMAIL: sttrading@naver.com</span>
+              <span>TEL: 031-596-6151 | EMAIL: sttrading@naver.com</span>
             </div>
 
           </div>

@@ -365,7 +365,7 @@ export default function Company({ activeTab = "greeting", onSubViewChange }: Com
 
                   <div className="pt-6 border-t border-slate-200 mt-6 text-[11px] text-slate-400 space-y-1">
                     <p className="font-semibold">{t("• 방문 일정 사전에 조율 요청 드립니다.", "• Please coordinate your visit with us in advance.")}</p>
-                    <p>• {t("고객센터", "Support")}: 031-5196-6151 | sttrading@naver.com</p>
+                    <p>• {t("고객센터", "Support")}: 031-596-6151 | sttrading@naver.com</p>
                   </div>
                 </div>
 
