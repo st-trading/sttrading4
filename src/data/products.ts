@@ -86,6 +86,102 @@ export const PRODUCTS: Product[] = [
     casNumber: "66422-95-5",
     packing: "25KG"
   },
+  {
+    id: "dye-08",
+    name: "ALPHA-NAPHTHOL",
+    englishName: "1-NAPHTHOL",
+    category: "dye",
+    description: "산화 염모제 제형에서 다양한 커플러 및 중간체와 반응하여 깊고 선명한 보라·적갈색 계열의 색상을 발현하는 고순도 염모 원료입니다.",
+    applications: ["염모제"],
+    origin: "중국 (China)",
+    specification: "Purity ≥ 99.0%",
+    casNumber: "90-15-3",
+    packing: "25KG"
+  },
+  {
+    id: "dye-09",
+    name: "PHENYL METHYL PYRAZOLONE",
+    englishName: "PHENYL METHYL PYRAZOLONE",
+    category: "dye",
+    description: "선명한 황색 및 오렌지 계열의 색조 조절에 탁월하며 산화 염모 제형 내에서 안정적인 발색력을 제공하는 고순도 염료 성분입니다.",
+    applications: ["염모제"],
+    origin: "중국 (China)",
+    specification: "Purity ≥ 99.5%",
+    casNumber: "89-25-8",
+    packing: "25KG"
+  },
+  {
+    id: "dye-10",
+    name: "2-METHYL-5-HYDROXYETHYLAMINOPHENOL",
+    englishName: "2-METHYL-5-HYDROXYETHYLAMINOPHENOL",
+    category: "dye",
+    description: "모발 손상을 줄이면서 선명하고 생생한 적갈색 및 마호가니 톤의 발색과 높은 색상 지속력을 제공하는 고순도 산화 염모 원료입니다.",
+    applications: ["염모제"],
+    origin: "중국 (China)",
+    specification: "Purity ≥ 99.0%",
+    casNumber: "55302-96-0",
+    packing: "25KG"
+  },
+  {
+    id: "dye-11",
+    name: "4-NITRO-O-PHENYLENEDIAMINE",
+    englishName: "4-NITRO-O-PHENYLENEDIAMINE",
+    category: "dye",
+    description: "따뜻하고 생기 있는 적황색 및 오렌지 브라운 색조를 구현하는 니트로계 염모 원료로, 균일하고 자연스러운 염색 효과를 선사합니다.",
+    applications: ["염모제"],
+    origin: "중국 (China)",
+    specification: "Purity ≥ 99.5%",
+    casNumber: "99-56-9",
+    packing: "25KG"
+  },
+  {
+    id: "dye-12",
+    name: "2-METHYL RESORCINOL",
+    englishName: "2-METHYLRESORCINOL",
+    category: "dye",
+    description: "산화 염모 제형에서 핵심 커플러로 작용하여 안정적이고 자연스러운 갈색 및 적갈색 톤의 컬러 밸런스를 형성하는 원료입니다.",
+    applications: ["염모제"],
+    origin: "중국 (China)",
+    specification: "Purity ≥ 99.0%",
+    casNumber: "608-25-3",
+    packing: "25KG"
+  },
+  {
+    id: "dye-13",
+    name: "N,N-BIS(2-HYDROXYETHYL)-P-PHENYLENEDIAMINE SULFATE",
+    englishName: "N,N-BIS(2-HYDROXYETHYL)-P-PHENYLENEDIAMINE SULFATE",
+    category: "dye",
+    description: "PPD 대체용으로 널리 활용되는 고순도 산화 염료 베이스 성분으로, 뛰어난 발색력과 우수한 세척·일광 견뢰도를 제공합니다.",
+    applications: ["염모제"],
+    origin: "중국 (China)",
+    specification: "Purity ≥ 99.0%",
+    casNumber: "54381-16-7",
+    packing: "25KG"
+  },
+  {
+    id: "dye-14",
+    name: "2,6-DIAMINOPYRIDINE",
+    englishName: "2,6-DIAMINOPYRIDINE",
+    category: "dye",
+    description: "깊이 있는 청색 및 애쉬 계열 색조 구현에 효과적인 커플러 원료로, 선명한 발색과 안정적인 염착력을 지원합니다.",
+    applications: ["염모제"],
+    origin: "중국 (China)",
+    specification: "Purity ≥ 99.0%",
+    casNumber: "141-86-6",
+    packing: "25KG"
+  },
+  {
+    id: "dye-15",
+    name: "PICRAMIC ACID",
+    englishName: "PICRAMIC ACID",
+    category: "dye",
+    description: "풍부하고 선명한 적갈색 및 붉은빛 톤을 구현하는 직접·산화 겸용 염모 원료로, 뛰어난 발색 밀도와 지속력을 자랑합니다.",
+    applications: ["염모제"],
+    origin: "일본 (Japan)",
+    specification: "Purity ≥ 98.0%",
+    casNumber: "96-91-3",
+    packing: "13KG"
+  },
 
   // 2. COLOR / 색소
   {
@@ -471,3 +567,4 @@ export const COMPANY_HISTORY_EN: HistoryItem[] = [
     ]
   }
 ];
+

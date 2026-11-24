@@ -172,6 +172,9 @@ export default function ProductSection({
     if (origin.includes("프랑스")) {
       return t(compact ? "프랑스" : "프랑스 (France)", "France");
     }
+    if (origin.includes("일본")) {
+      return t(compact ? "일본" : "일본 (Japan)", "Japan");
+    }
     if (origin.includes("중국")) {
       return t(compact ? "중국" : "중국 (China)", "China");
     }
